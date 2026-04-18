@@ -2287,162 +2287,75 @@ Keep output concise, table-based, and suitable for a report
 
 状态迁移测试
 
-## **Input**
-```
-System Overview:
+1 State Definition
+Obvious user state transitions exist in this system, and five states are defined as follows:
+| State | Description |
+| --- | --- |
+| Unregistered | The user has not created an account in the system yet |
+| Registered & Unlogged-in | The account exists, but no valid Token has been obtained |
+| Logged-in & Valid Token | The user is logged in with an unexpired JWT Token, and can access all authentication-required interfaces |
+| Logged-in & Invalid Token | The Token has expired; the user must log in again to access protected resources |
+| Password Reset & Remaining | The user completes password reset while staying logged in, and the current Token remains valid |
 
-The system under test is a RESTful user management API. Testing is performed based on API specifications.
-
-Relevant Endpoints:
-
-- POST /users - Register (no auth required)
-- POST /users/login - Login (no auth required)
-- GET /users/{id} - Get user by ID (auth required)
-- PUT /users/me - Update user info (auth required)
-
-State Definition:
-
-- S1: Unregistered
-- S2: Registered but not logged in
-- S3: Logged in (token valid)
-- S4: Token expired
-
-Valid Transitions:
-
-- S1 → S2: POST /users (successful registration)
-- S2 → S3: POST /users/login (successful login)
-- S3 → S4: token expiry
-
-Invalid Transitions (should fail):
-
-- S1 → S3: call authenticated endpoint without login
-- S2 → S3: call authenticated endpoint with invalid credentials
-```
-## **v1**
-
-### **Prompt**
-```
-You are a software testing expert.
-
-Given the following system overview and requirements:
-
-{Input}
-
-Generate state transition test cases for the user authentication flow.
-
-Output a table with columns: Test Case ID | Initial State | Action | Expected Final State | Expected Result
-
-Generate exactly 5 test cases.
-```
-### **Output**
-
-
-| Test Case ID | Initial State                     | Action                                                    | Expected Final State              | Expected Result                                                                              |
-| ------------ | --------------------------------- | --------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------- |
-| TC1          | S1 (Unregistered)                 | POST /users with valid new user data                      | S2 (Registered but not logged in) | 201 Created; user is registered but no token returned; cannot access authenticated endpoints |
-| TC2          | S2 (Registered but not logged in) | POST /users/login with valid credentials                  | S3 (Logged in, token valid)       | 200 OK; authentication token returned and valid                                              |
-| TC3          | S3 (Logged in)                    | Wait for token expiry (simulated via time or mock expiry) | S4 (Token expired)                | 401 Unauthorized when trying to use expired token                                            |
-| TC4          | S1 (Unregistered)                 | GET /users/{id} (authenticated endpoint) without token    | S1 (Unregistered)                 | 401 Unauthorized; user remains unregistered                                                  |
-| TC5          | S2 (Registered but not logged in) | POST /users/login with invalid credentials                | S2 (Registered but not logged in) | 401 Unauthorized; no token issued; user still not logged in                                  |
-
-
-## **v2**
-
-### **Prompt**
-```
+2.Prompt
 You are a software testing expert performing black-box testing.
 
-Given the following system overview and requirements:
+Given the following system overview and state definitions:
 
 {Input}
 
-Generate state transition test cases for the user authentication flow.
+Generate the result in a structured testing report format with two sections:
+
+1. State Transition Diagram
+   Table columns: Current State | Operation / API | Condition | Next State | Expected Result
+
+2. State Transition Test Cases
+   Table columns: Test Case ID | Current State | Operation / API | Input Summary | Expected Result | Test Type
 
 Requirements:
 
-- Cover valid transitions: registration → login → token expiry
-- Cover invalid transitions: unregistered user calling authenticated endpoint, login with invalid credentials
-- Include HTTP status codes and business codes in expected results
+* Define all system states clearly (e.g., Unregistered, Registered-NotLoggedIn, LoggedIn-TokenValid, LoggedIn-TokenExpired)
+* Cover three types of transitions:
+  - Valid transitions: operations that successfully change the system state (e.g., register → login → authenticated)
+  - Invalid transitions: operations performed in a wrong state that should be rejected (e.g., accessing protected resources without token → 401)
+  - Self-loop transitions: operations that fail and leave the system in the same state (e.g., duplicate registration → 409, wrong password → 401)
+* Each test case must correspond to exactly ONE state transition
+* Include both authentication errors (401) and authorization errors (403)
+* Generate exactly 10 high-quality test cases (no duplicates)
+* Use ONLY the provided requirements — do NOT assume extra rules
+* Keep output concise, table-based, and suitable for a report
+* 
+3.Output
+I will explain with your project as a direct example.
 
-Output a table with columns: Test Case ID | Initial State | Action | Expected Final State | Expected HTTP Status | Expected Business Code
-
-Generate exactly 8 test cases.
-```
-### **Output**
-
-
-| Test Case ID | Initial State                     | Action                                           | Expected Final State              | Expected HTTP Status             | Expected Business Code                                          |
-| ------------ | --------------------------------- | ------------------------------------------------ | --------------------------------- | -------------------------------- | --------------------------------------------------------------- |
-| TC1          | S1 (Unregistered)                 | POST /users with valid unique email and password | S2 (Registered but not logged in) | 201 Created                      | REG_SUCCESS (e.g., 1000)                                        |
-| TC2          | S2 (Registered but not logged in) | POST /users/login with correct credentials       | S3 (Logged in, token valid)       | 200 OK                           | LOGIN_SUCCESS (e.g., 1100)                                      |
-| TC3          | S3 (Logged in)                    | Wait for token TTL expiry (e.g., 30 min)         | S4 (Token expired)                | 200 OK (on expiry action) or N/A | TOKEN_EXPIRED (e.g., 1301) when next authenticated call is made |
-| TC4          | S4 (Token expired)                | PUT /users/me with expired token                 | S4 (Token expired)                | 401 Unauthorized                 | TOKEN_EXPIRED (e.g., 1301)                                      |
-| TC5          | S1 (Unregistered)                 | GET /users/{id} without any auth header          | S1 (Unregistered)                 | 401 Unauthorized                 | AUTH_MISSING (e.g., 1300)                                       |
-| TC6          | S2 (Registered but not logged in) | POST /users/login with wrong password            | S2 (Registered but not logged in) | 401 Unauthorized                 | INVALID_CREDENTIALS (e.g., 1101)                                |
-| TC7          | S2 (Registered but not logged in) | GET /users/{id} with missing or invalid token    | S2 (Registered but not logged in) | 401 Unauthorized                 | AUTH_MISSING (e.g., 1300)                                       |
-| TC8          | S1 (Unregistered)                 | POST /users/login with non-existent email        | S1 (Unregistered)                 | 401 Unauthorized                 | USER_NOT_FOUND (e.g., 1102)                                     |
+---
+The core of state transition testing is to draw a state diagram first, and then design test cases based on the diagram.The user state diagram of your project is as follows:
+<img width="1280" height="805" alt="image" src="https://github.com/user-attachments/assets/7706b11e-b11e-47eb-a26c-7a3e866830d3" />
 
 
-## **v3**
+---
+Three types of test cases are designed from this diagram:
+1.Positive Transition (successful state conversion)
+| Test Case | Current State | Operation | Expected Result | Expected New State |
+| --- | --- | --- | --- | --- |
+| ST01 | Unregistered | POST /users (Valid Parameters) | 200 | Registered & Unlogged-in |
+| ST02 | Registered & Unlogged-in | POST /users/login | 200, 返回Token | Logged-in & Valid Token |
+| ST03 | Logged-in & Valid Token | PUT /users/password | 200 | Password Reset & Remaining Logged-in |
+| ST04 | Logged-in & Valid Token | POST /educations | 200 | Logged-in (Education Experience Added) |
+2.Illegal Transition (operation rejected under incorrect status)
+| Test Case | Current State | Operation | Expected Result |
+| --- | --- | --- | --- |
+| ST05 | Unregistered | POST /users/login | 401, Login Failed |
+| ST06 | Registered & Unlogged-in | POST /educations | 401, Unauthenticated |
+| ST07 | Logged-in & Invalid Token | GET /users/{id} | 401, Invalid Token |
+| ST08 | Logged-in | Access Others' Education Records | 403, Permission Denied |
 
-### **Prompt**
+3.Repeated Transition (repeated operations in the same state)
+| Test Case | Current State | Operation | Expected Result |
+| --- | --- | --- | --- |
+| ST09 | Registered & Unlogged-in | Repeat POST /users (Same Email) | 409, Email Already Exists |
 
-```
-You are a software testing expert performing black-box testing.
-
-Given the following system overview and requirements:
-
-{Input}
-
-Generate state transition test cases for the user authentication flow.
-
-State Definition:
-
-- S1: Unregistered
-- S2: Registered but not logged in
-- S3: Logged in (has valid token)
-- S4: Token expired
-
-Valid Transitions:
-
-- S1 → S2: POST /users (successful registration)
-- S2 → S3: POST /users/login (successful login)
-- S3 → S4: wait for token expiry or simulate expired token
-
-Invalid Transitions (should return 401):
-
-- S1 → S3: call GET /users/1 without logging in
-- S2 → S3: call GET /users/1 with invalid token
-- S3 → S2: call authenticated endpoint with expired token
-
-Requirements:
-
-- Use ONLY the provided requirements
-- Cover all valid and invalid transitions listed above
-- Each test case must correspond to one transition
-- Include concrete API call examples in the Action column
-
-Output a table with columns:
-
-Test Case ID | Initial State | Action (API call example) | Expected Final State | Expected HTTP Status | Expected Business Code
-
-Generate exactly 8-10 test cases.
-```
-
-### **Output**
-
-
-| TC ID | Initial State                  | Action (API call example)                                            | Expected Final State           | Expected HTTP | Expected Code |
-| ----- | ------------------------------ | -------------------------------------------------------------------- | ------------------------------ | ------------- | ------------- |
-| TC1   | S1 (Unregistered)              | `POST /users` with valid username, password, email, verificationCode | S2 (Registered, not logged in) | 200           | 0             |
-| TC2   | S2 (Registered, not logged in) | `POST /users/login` with valid credentials                           | S3 (Logged in, token valid)    | 200           | 0             |
-| TC3   | S3 (Logged in)                 | `GET /users/1` with expired token                                    | S2 (Not logged in)             | 401           | 401           |
-| TC4   | S1 (Unregistered)              | `GET /users/1` without token                                         | S1 (Unregistered)              | 401           | 401           |
-| TC5   | S2 (Registered, not logged in) | `GET /users/1` with invalid token (e.g., "abc123")                   | S2 (Not logged in)             | 401           | 401           |
-| TC6   | S3 (Logged in)                 | `GET /users/1` with expired token                                    | S2 (Not logged in)             | 401           | 401           |
-| TC7   | S2 (Registered, not logged in) | `POST /users/login` with wrong password                              | S2 (Not logged in)             | 400           | 2005          |
-| TC8   | S2 (Registered, not logged in) | `POST /users/login` with non-existent email                          | S2 (Not logged in)             | 400           | 2005          |
-| TC9   | S1 (Unregistered)              | `PUT /users/me` without token                                        | S1 (Unregistered)              | 401           | 401           |
-| TC10  | S3 (Logged in)                 | `PUT /users/me` with valid token                                     | S3 (Logged in)                 | 200           | 0             |
-
-
+---
+4 Analysis
+State transition testing covers time-dependent scenarios that cannot be covered by Equivalence Partitioning (EP) and Boundary Value Analysis (BVA).According to test results, the system correctly processes positive transition paths (ST01–ST04).It accurately returns 401/403 status codes for illegal transitions (ST05–ST08), indicating that the authentication and authorization mechanisms function properly.In loopback transitions (ST09–ST10), the system correctly rejects operations without altering states, and business rules operate as expected.
+Notably, ST07 (unauthorized access to protected interfaces with expired tokens, returning 401) and ST08 (unauthorized operation by logged-in users, returning 403) have already been included as independent cases in EP/BVA testing.State transition testing incorporates these scenarios into the complete state flow context, further verifying their behavioral consistency under real-world usage sequences.
