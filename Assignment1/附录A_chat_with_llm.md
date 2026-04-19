@@ -1477,8 +1477,32 @@ Generate exactly 10 test cases.
 **1) Equivalence Partitioning**
 
 
-| ID  | Description | Outcome |
-| --- | ----------- | ------- |
+| ID   | Description                                                                 | Outcome                                                                 |
+| ---- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| EP1  | No query parameters provided                                                | Valid, HTTP 200, defaults applied: page=1, limit=20                     |
+| EP2  | page is a positive integer                                                  | Valid, HTTP 200                                                         |
+| EP3  | page is 0 or negative integer                                               | Valid, auto-corrected to 1, HTTP 200                                    |
+| EP4  | page is non-integer or wrong type                                           | Invalid, HTTP 400, code=1001                                            |
+| EP5  | limit is an integer between 1 and 100                                       | Valid, HTTP 200                                                         |
+| EP6  | limit is 0 or negative integer                                              | Valid, auto-corrected to 20, HTTP 200                                   |
+| EP7  | limit is greater than 100                                                   | Valid, truncated to 100, HTTP 200                                       |
+| EP8  | limit is non-integer or wrong type                                          | Invalid, HTTP 400, code=1001                                            |
+| EP9  | companySizes is an array of integers                                        | Valid, HTTP 200                                                         |
+| EP10 | companySizes is not an array of integers                                    | Invalid, HTTP 400, code=1001                                            |
+| EP11 | fundingTypes is an array of integers                                        | Valid, HTTP 200                                                         |
+| EP12 | fundingTypes is not an array of integers                                    | Invalid, HTTP 400, code=1001                                            |
+| EP13 | industries is an array of strings                                           | Valid, HTTP 200                                                         |
+| EP14 | industries is not an array of strings                                       | Invalid, HTTP 400, code=1001                                            |
+| EP15 | companyName is a string                                                     | Valid, HTTP 200                                                         |
+| EP16 | companyName is not a string                                                 | Invalid, HTTP 400, code=1001                                            |
+| EP17 | employment is INTERN or FULL_TIME                                           | Valid, HTTP 200                                                         |
+| EP18 | employment is omitted                                                       | Valid, no employment restriction, HTTP 200                            |
+| EP19 | employment is outside enum or wrong type                                    | Invalid, HTTP 400, code=1001                                            |
+| EP20 | filterSalaryMin / filterSalaryMax are integers                              | Valid, HTTP 200                                                         |
+| EP21 | filterSalaryMin / filterSalaryMax are non-integer or wrong type             | Invalid, HTTP 400, code=1001                                            |
+| EP22 | jobName is a string                                                         | Valid, inclusion match applied, HTTP 200                                |
+| EP23 | jobName is not a string                                                     | Invalid, HTTP 400, code=1001                                            |
+| EP24 | Valid combination of pagination and filters                                 | Valid, HTTP 200, filtered paginated result returned                     |
 
 
 **2) Boundary Value Analysis**
@@ -1501,8 +1525,18 @@ Generate exactly 10 test cases.
 **3) Sample Test Cases**
 
 
-| Test Case ID | Scenario | Expected Result |
-| ------------ | -------- | --------------- |
+| Test Case ID | Scenario                                                                                                                                      | Expected Result                                                                                         |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| TC01         | Call GET /jobs with no parameters                                                                                                             | HTTP 200; code=0; data contains list, total, page=1, limit=20, totalPages                                 |
+| TC02         | Call GET /jobs?page=2&limit=50                                                                                                                | HTTP 200; code=0; response shows page=2, limit=50; data structure is correct                          |
+| TC03         | Call GET /jobs?page=0&limit=0                                                                                                                 | HTTP 200; code=0; system auto-corrects to page=1, limit=20                                              |
+| TC04         | Call GET /jobs?page=-5&limit=-10                                                                                                              | HTTP 200; code=0; system auto-corrects to page=1, limit=20                                              |
+| TC05         | Call GET /jobs?limit=101                                                                                                                      | HTTP 200; code=0; system truncates limit to 100                                                         |
+| TC06         | Call GET /jobs?page=abc                                                                                                                       | HTTP 400; code=1001                                                                                     |
+| TC07         | Call GET /jobs?employment=PART_TIME                                                                                                           | HTTP 400; code=1001                                                                                     |
+| TC08         | Call GET /jobs?companySizes=small or companySizes=[1,"a"]                                                                                     | HTTP 400; code=1001                                                                                     |
+| TC09         | Call GET /jobs?employment=FULL_TIME&jobName=engineer&companyName=Tech&industries=["AI"]                                                       | HTTP 200; code=0; returned jobs satisfy filters; jobName uses inclusion match                          |
+| TC10         | Call GET /jobs?filterSalaryMin=5000&filterSalaryMax=10000&fundingTypes=[1,2]&companySizes=[50,100]                                              | HTTP 200; code=0; filtered paginated result returned with correct response structure                    |
 
 
 #### v2
@@ -1541,8 +1575,32 @@ Keep      output concise and structured
 **1) Equivalence Partitioning**
 
 
-| ID  | Description | Outcome |
-| --- | ----------- | ------- |
+| ID   | Description                                                                 | Outcome                                                                 |
+| ---- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| EP1  | No parameters provided                                                      | Valid, HTTP 200, defaults applied: page=1, limit=20                     |
+| EP2  | page is a positive integer                                                  | Valid, HTTP 200                                                         |
+| EP3  | page is 0 or negative integer                                               | Valid, corrected to 1, HTTP 200                                       |
+| EP4  | page is non-integer or wrong type                                           | Invalid, HTTP 400, code=1001                                            |
+| EP5  | limit is integer in range 1..100                                            | Valid, HTTP 200                                                         |
+| EP6  | limit is 0 or negative integer                                              | Valid, corrected to 20, HTTP 200                                        |
+| EP7  | limit is greater than 100                                                     | Valid, truncated to 100, HTTP 200                                       |
+| EP8  | limit is non-integer or wrong type                                          | Invalid, HTTP 400, code=1001                                            |
+| EP9  | companySizes is an array of integers                                        | Valid, HTTP 200                                                         |
+| EP10 | companySizes contains non-integer or is wrong type                          | Invalid, HTTP 400, code=1001                                            |
+| EP11 | fundingTypes is an array of integers                                        | Valid, HTTP 200                                                         |
+| EP12 | fundingTypes contains non-integer or is wrong type                          | Invalid, HTTP 400, code=1001                                            |
+| EP13 | industries is an array of strings                                           | Valid, HTTP 200                                                         |
+| EP14 | industries contains non-string or is wrong type                             | Invalid, HTTP 400, code=1001                                            |
+| EP15 | companyName is a string                                                       | Valid, HTTP 200                                                         |
+| EP16 | companyName is wrong type                                                   | Invalid, HTTP 400, code=1001                                            |
+| EP17 | employment is INTERN or FULL_TIME                                           | Valid, HTTP 200                                                         |
+| EP18 | employment is omitted                                                       | Valid, no employment restriction, HTTP 200                            |
+| EP19 | employment has invalid enum value or wrong type                             | Invalid, HTTP 400, code=1001                                            |
+| EP20 | filterSalaryMin / filterSalaryMax are integers                              | Valid, HTTP 200                                                         |
+| EP21 | filterSalaryMin / filterSalaryMax are wrong type                            | Invalid, HTTP 400, code=1001                                            |
+| EP22 | jobName is a string                                                         | Valid, inclusion match, HTTP 200                                      |
+| EP23 | jobName is wrong type                                                       | Invalid, HTTP 400, code=1001                                            |
+| EP24 | Multiple valid filters used together                                        | Valid, HTTP 200, filtered paginated result                              |
 
 
 **2) Boundary Value Analysis**
@@ -1565,8 +1623,18 @@ Keep      output concise and structured
 **3) Sample Test Cases**
 
 
-| Test Case ID | Scenario | Expected Result |
-| ------------ | -------- | --------------- |
+| Test Case ID | Scenario                                                                                                                                      | Expected Result                                                                                         |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| TC01         | GET /jobs with no parameters                                                                                                                  | HTTP 200, code=0, data contains list, total, page=1, limit=20, totalPages                                 |
+| TC02         | GET /jobs?page=2&limit=50                                                                                                                     | HTTP 200, code=0, response shows page=2, limit=50                                                       |
+| TC03         | GET /jobs?page=0&limit=0                                                                                                                      | HTTP 200, code=0, corrected to page=1, limit=20                                                         |
+| TC04         | GET /jobs?page=-3&limit=101                                                                                                                   | HTTP 200, code=0, corrected to page=1, truncated to limit=100                                           |
+| TC05         | GET /jobs?page=abc                                                                                                                            | HTTP 400, code=1001                                                                                     |
+| TC06         | GET /jobs?limit=1.5                                                                                                                           | HTTP 400, code=1001                                                                                     |
+| TC07         | GET /jobs?employment=PART_TIME                                                                                                                | HTTP 400, code=1001                                                                                     |
+| TC08         | GET /jobs?companySizes=[1,"x"]                                                                                                                | HTTP 400, code=1001                                                                                     |
+| TC09         | GET /jobs?employment=FULL_TIME&jobName=engineer                                                                                               | HTTP 200, code=0, returned jobs match FULL_TIME; jobName is matched by inclusion                        |
+| TC10         | GET /jobs?companyName=Tech&industries=["AI"]&fundingTypes=[1,2]&filterSalaryMin=5000&filterSalaryMax=10000                                    | HTTP 200, code=0, filtered paginated result returned with valid response structure                      |
 
 
 #### v3
@@ -1613,8 +1681,32 @@ Keep output concise, table-based, and suitable for a report
 **1) Equivalence Partitioning**
 
 
-| ID  | Description | Outcome |
-| --- | ----------- | ------- |
+| ID   | Description                                                                 | Outcome                                                                 |
+| ---- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| EP1  | No query parameters provided                                                | Valid — HTTP 200, code=0, default page=1, limit=20                     |
+| EP2  | page is a positive integer                                                  | Valid — HTTP 200                                                        |
+| EP3  | page is 0 or negative integer                                               | Valid — corrected to 1, HTTP 200                                        |
+| EP4  | page is non-integer or wrong type                                           | Invalid — HTTP 400, code=1001                                           |
+| EP5  | limit is integer within 1..100                                              | Valid — HTTP 200                                                        |
+| EP6  | limit is 0 or negative integer                                               | Valid — corrected to 20, HTTP 200                                     |
+| EP7  | limit is greater than 100                                                     | Valid — truncated to 100, HTTP 200                                    |
+| EP8  | limit is non-integer or wrong type                                          | Invalid — HTTP 400, code=1001                                           |
+| EP9  | employment is INTERN or FULL_TIME                                           | Valid — HTTP 200                                                        |
+| EP10 | employment is omitted                                                         | Valid — no employment restriction, HTTP 200                           |
+| EP11 | employment is invalid enum or wrong type                                    | Invalid — HTTP 400, code=1001                                           |
+| EP12 | companySizes is an array of integers                                        | Valid — HTTP 200                                                        |
+| EP13 | companySizes is wrong type or contains non-integer values                    | Invalid — HTTP 400, code=1001                                           |
+| EP14 | fundingTypes is an array of integers                                        | Valid — HTTP 200                                                        |
+| EP15 | fundingTypes is wrong type or contains non-integer values                    | Invalid — HTTP 400, code=1001                                           |
+| EP16 | industries is an array of strings                                           | Valid — HTTP 200                                                        |
+| EP17 | industries is wrong type or contains non-string values                      | Invalid — HTTP 400, code=1001                                           |
+| EP18 | companyName is a string                                                     | Valid — HTTP 200                                                        |
+| EP19 | companyName is wrong type                                                   | Invalid — HTTP 400, code=1001                                           |
+| EP20 | filterSalaryMin and filterSalaryMax are integers                            | Valid — HTTP 200                                                        |
+| EP21 | filterSalaryMin or filterSalaryMax is wrong type                            | Invalid — HTTP 400, code=1001                                           |
+| EP22 | jobName is a string                                                         | Valid — inclusion match applied, HTTP 200                               |
+| EP23 | jobName is wrong type                                                       | Invalid — HTTP 400, code=1001                                           |
+| EP24 | Multiple valid filters and pagination used together                         | Valid — HTTP 200, filtered paginated result                             |
 
 
 **2) Boundary Value Analysis**
@@ -1637,8 +1729,18 @@ Keep output concise, table-based, and suitable for a report
 **3) Sample Test Cases**
 
 
-| Test Case ID | Scenario | Expected Result |
-| ------------ | -------- | --------------- |
+| Test Case ID | Scenario                                                                                                                                      | Expected Result                                                                                                                            |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| TC01         | Send GET /jobs with no parameters                                                                                                             | HTTP 200, code=0; response contains data.list, data.total, data.page=1, data.limit=20, data.totalPages                                     |
+| TC02         | Send GET /jobs?page=2&limit=50                                                                                                                | HTTP 200, code=0; response shows page=2, limit=50                                                                                          |
+| TC03         | Send GET /jobs?page=0                                                                                                                         | HTTP 200, code=0; page is corrected to 1                                                                                                   |
+| TC04         | Send GET /jobs?limit=0                                                                                                                        | HTTP 200, code=0; limit is corrected to 20                                                                                                 |
+| TC05         | Send GET /jobs?limit=101                                                                                                                      | HTTP 200, code=0; limit is truncated to 100                                                                                                |
+| TC06         | Send GET /jobs?page=abc                                                                                                                       | HTTP 400, code=1001                                                                                                                        |
+| TC07         | Send GET /jobs?employment=PART_TIME                                                                                                           | HTTP 400, code=1001                                                                                                                        |
+| TC08         | Send GET /jobs?companySizes=[1,"x"]                                                                                                           | HTTP 400, code=1001                                                                                                                        |
+| TC09         | Send GET /jobs?employment=FULL_TIME&jobName=engineer                                                                                        | HTTP 200, code=0; results are restricted to FULL_TIME; jobName is matched by inclusion                                                  |
+| TC10         | Send GET /jobs?page=-3&limit=150&companyName=Tech&industries=["AI"]&fundingTypes=[1,2]&filterSalaryMin=5000&filterSalaryMax=10000            | HTTP 200, code=0; page corrected to 1, limit truncated to 100; filtered paginated result returned with valid response structure           |
 
 
 ### 7.POST /jobs
