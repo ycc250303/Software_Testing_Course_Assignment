@@ -499,85 +499,100 @@ Given the following system overview and requirements:
 
 Generate the result in a formal software testing report format with three sections:
 
-Equivalence Partitioning
+1. Equivalence Partitioning
 Table columns: ID | Description | Outcome
-Clearly distinguish valid and invalid classes.
-Cover constraints: pagination defaults, pagination correction rules, enum validation, type validation, and filtering behavior.
-Boundary Value Analysis
+  - Clearly distinguish valid and invalid classes
+  - Cover constraints: pagination defaults, pagination correction rules, enum validation, type validation, and filtering behavior
+2. Boundary Value Analysis
 Table columns: Field | Boundary Values
-Include meaningful boundary values.
-page: negative, zero, one, typical positive
-limit: negative, zero, default, upper bound 100, above upper bound
-employment: valid enum values and invalid enum values
-filterSalaryMin, filterSalaryMax: boundary values (0, positive, large numbers)
-jobName: empty string, single character, long string
-Sample Test Cases
-Table columns: Test Case ID | Scenario | Expected Result
-
+  - Include meaningful boundary values
+  - page: negative, zero, one, typical positive
+  - limit: negative, zero, default, upper bound 100, above upper bound
+  - employment: valid enum values and invalid enum values
+  - filterSalaryMin, filterSalaryMax: boundary values (0, positive, large numbers)
+  - jobName: empty string, single character, long string
+3. Sample Test Cases
+Table columns: Test Case ID | Scenario (with parameter combinations) | Expected HTTP Status | Expected Business Code | Covered Rules
 Requirements:
 
-Use ONLY the provided requirements
-Cover: normal case, missing fields, boundary values, invalid formats, duplicate username/email, and invalid verification code
-Generate exactly 10 high-quality test cases (no duplicates)
-Each test case must correspond to a rule or boundary condition
-Keep output concise, table-based, and suitable for a report
+- Use ONLY the provided requirements
+* Cover: default pagination, corrected page/limit values, upper bound truncation, valid filters, invalid enum/type input, and combined query conditions
+* Each test case must combine 2-4 parameters (e.g., employment + jobName, filterSalaryMin + filterSalaryMax + employment, companyName + industries, etc.)
+* Do NOT create test cases that only test a single parameter — each test case must test interactions between multiple parameters
+- Generate exactly 12-15 high-quality test cases (no duplicates)
+- Each test case must correspond to a rule or boundary condition
+- Keep output concise, table-based, and suitable for a report
 ```
 
 #### 5.5.2 output
 
-1. Equivalence Partitioning
+**1) Equivalence Partitioning**
 
 
-| ID   | Description                                                                                                     | Outcome                        |
-| ---- | --------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| EP01 | All fields provided with valid values; username and email are unique; verificationCode is valid and not expired | Valid                          |
-| EP02 | username missing                                                                                                | Invalid -> HTTP 400, code 1001 |
-| EP03 | username length < 3                                                                                             | Invalid -> HTTP 400, code 1001 |
-| EP04 | username length 3-50                                                                                            | Valid                          |
-| EP05 | username length > 50                                                                                            | Invalid -> HTTP 400, code 1001 |
-| EP06 | password missing                                                                                                | Invalid -> HTTP 400, code 1001 |
-| EP07 | password length < 6                                                                                             | Invalid -> HTTP 400, code 1001 |
-| EP08 | password length 6-20                                                                                            | Valid                          |
-| EP09 | password length > 20                                                                                            | Invalid -> HTTP 400, code 1001 |
-| EP10 | email missing                                                                                                   | Invalid -> HTTP 400, code 1001 |
-| EP11 | email format valid and length <= 100                                                                            | Valid                          |
-| EP12 | email format invalid                                                                                            | Invalid -> HTTP 400, code 1001 |
-| EP13 | email length > 100                                                                                              | Invalid -> HTTP 400, code 1001 |
-| EP14 | verificationCode missing                                                                                        | Invalid -> HTTP 400, code 1001 |
-| EP15 | verificationCode is exactly 6 digits                                                                            | Valid format class             |
-| EP16 | verificationCode length != 6                                                                                    | Invalid -> HTTP 400, code 1001 |
-| EP17 | verificationCode contains non-digit characters                                                                  | Invalid -> HTTP 400, code 1001 |
-| EP18 | username already exists                                                                                         | Invalid -> HTTP 400, code 2001 |
-| EP19 | email already exists                                                                                            | Invalid -> HTTP 400, code 2002 |
-| EP20 | verificationCode invalid or expired                                                                             | Invalid -> HTTP 400, code 2003 |
+| ID   | Description                                                             | Outcome                        |
+| ---- | ----------------------------------------------------------------------- | ------------------------------ |
+| EP-01 | Valid page value (positive integer)                                     | Valid                          |
+| EP-02 | Invalid page value (≤0) → treated as 1                                   | Valid (corrected)              |
+| EP-03 | Invalid page value (non-integer, e.g., "abc")                           | Invalid → 400                  |
+| EP-04 | Valid limit value (1-100)                                                | Valid                          |
+| EP-05 | Invalid limit value (≤0) → treated as 20                                 | Valid (corrected)              |
+| EP-06 | Invalid limit value (>100) → truncated to 100                            | Valid (corrected)              |
+| EP-07 | Invalid limit value (non-integer)                                        | Invalid → 400                  |
+| EP-08 | Valid employment enum: INTERN                                            | Valid                          |
+| EP-09 | Valid employment enum: FULL_TIME                                         | Valid                          |
+| EP-10 | Invalid employment value (e.g., "PART_TIME")                             | Invalid → 400                  |
+| EP-11 | Valid companySizes (array of integers)                                  | Valid                          |
+| EP-12 | Invalid companySizes (contains non-integer)                             | Invalid → 400                  |
+| EP-13 | Valid fundingTypes (array of integers)                                  | Valid                          |
+| EP-14 | Invalid fundingTypes (non-array, e.g., string)                           | Invalid → 400                  |
+| EP-15 | Valid industries (array of strings)                                     | Valid                          |
+| EP-16 | Valid companyName (any string)                                           | Valid                          |
+| EP-17 | Valid jobName (any string, inclusion match)                              | Valid                          |
+| EP-18 | Valid filterSalaryMin (positive integer)                                | Valid                          |
+| EP-19 | Valid filterSalaryMax (positive integer)                                | Valid                          |
+| EP-20 | filterSalaryMin > filterSalaryMax                                        | Valid (returns empty list)     |
+| EP-21 | Invalid filterSalaryMin (non-integer)                                   | Invalid → 400                  |
+| EP-22 | Missing all optional parameters                                         | Valid                          |
 
 
-1. Boundary Value Analysis
+**2) Boundary Value Analysis**
 
 
 | Field            | Boundary Values                                                    |
 | ---------------- | ------------------------------------------------------------------ |
-| username         | 2, 3, 4, 49, 50, 51 characters                                     |
-| password         | 5, 6, 7, 19, 20, 21 characters                                     |
-| email            | missing, valid format, invalid format, 99, 100, 101 characters     |
-| verificationCode | missing, 5 digits, 6 digits, 7 digits, 6 characters with non-digit |
+| page             | -1, 0, 1, 2, 1000                                                  |
+| limit            | -5, 0, 1, 20, 99, 100, 101, 200                                   |
+| employment       | "INTERN", "FULL_TIME", "PART_TIME", "CONTRACT", ""                 |
+| filterSalaryMin  | 0, 1, 50000, 999999999, 2^31-1                                      |
+| filterSalaryMax  | 0, 1, 50000, 999999999, 2^31-1                                      |
+| jobName          | "" (empty), "a", "engineer", "very_long_string_" + "x"*1000        |
+| companyName      | "" (empty), "Google", "a", "非常长的公司名称"                       |
+| industries       | [] (empty), ["tech"], ["tech", "finance", "healthcare"]            |
+| companySizes     | [0], [1], [10], [100], [1000]                                      |
 
 
-1. Sample Test Cases
+**3) Sample Test Cases**
 
 
-| Test Case ID | Scenario                                                                                   | Expected Result     |
-| ------------ | ------------------------------------------------------------------------------------------ | ------------------- |
-| TC01         | Register with valid username/password/email and valid non-expired 6-digit verificationCode | HTTP 200, code=0    |
-| TC02         | Register with username missing                                                             | HTTP 400, code=1001 |
-| TC03         | Register with username length=2                                                            | HTTP 400, code=1001 |
-| TC04         | Register with username length=51                                                           | HTTP 400, code=1001 |
-| TC05         | Register with password length=5                                                            | HTTP 400, code=1001 |
-| TC06         | Register with password length=21                                                           | HTTP 400, code=1001 |
-| TC07         | Register with email in invalid format                                                      | HTTP 400, code=1001 |
-| TC08         | Register with verificationCode containing 6 characters with a non-digit                    | HTTP 400, code=1001 |
-| TC09         | Register with an existing username and otherwise valid inputs                              | HTTP 400, code=2001 |
-| TC10         | Register with a new username and email, but an invalid or expired verificationCode         | HTTP 400, code=2003 |
+
+
+| Test Case ID | Scenario (with parameter combinations)                                          | Expected HTTP Status | Expected Business Code | Covered Rules                                                    |
+|--------------|---------------------------------------------------------------------------------|----------------------|------------------------|------------------------------------------------------------------|
+| TC-01        | page=-5, limit=0 (both corrected to 1 and 20), employment=INTERN, jobName="developer" | 200                  | 0                      | R2: page≤0→1, limit≤0→20; R3: employment filter + jobName inclusion |
+| TC-02        | page=2, limit=150 (truncated to 100), filterSalaryMin=50000, filterSalaryMax=100000 | 200                  | 0                      | R2: limit>100→100; R3: salary range filter                       |
+| TC-03        | page=1, limit=100, employment=FULL_TIME, companyName="Tech", filterSalaryMin=0   | 200                  | 0                      | R3: multiple filters combined (employment, companyName, salary) |
+| TC-04        | page=0, limit=20, industries=["finance","healthcare"], jobName="data", fundingTypes=[1,2] | 200                  | 0                      | R2: page=0→1; R3: industries array + fundingTypes array + jobName inclusion |
+| TC-05        | page=3, limit=50, filterSalaryMin=80000, filterSalaryMax=120000, employment=INTERN | 200                  | 0                      | R3: salary range + employment type; valid boundary values        |
+| TC-06        | page=1, limit=101 (→100), companySizes=[10,50,100], jobName="", filterSalaryMin=1 | 200                  | 0                      | R2: limit truncation; R3: empty jobName (matches all), companySizes filter |
+| TC-07        | page="invalid" (string), limit=20, employment=FULL_TIME                         | 400                  | 1001                   | R4: invalid page type (string instead of integer)               |
+| TC-08        | page=1, limit="abc" (string), jobName="engineer", filterSalaryMin=30000         | 400                  | 1001                   | R4: invalid limit type (string)                                  |
+| TC-09        | page=1, limit=20, employment="PART_TIME" (invalid enum), companyName="ABC"      | 400                  | 1001                   | R4: invalid enum value for employment                             |
+| TC-10        | page=1, limit=20, companySizes="not_an_array" (string), fundingTypes=[1,2]       | 400                  | 1001                   | R4: invalid type for companySizes (string instead of array)      |
+| TC-11        | page=2, limit=30, industries="tech" (string instead of array), jobName="manager" | 400                  | 1001                   | R4: invalid type for industries (string vs array)                |
+| TC-12        | page=1, limit=20, filterSalaryMin="high" (non-integer), filterSalaryMax=100000, employment=FULL_TIME | 400                  | 1001                   | R4: invalid type for filterSalaryMin                             |
+| TC-13        | page=5, limit=75, fundingTypes=[1,"two",3] (mixed types), jobName="analyst", filterSalaryMin=40000 | 400                  | 1001                   | R4: fundingTypes contains non-integer element                    |
+| TC-14        | page=1, limit=default (omitted), filterSalaryMin=100000, filterSalaryMax=50000 (min > max), industries=["tech"] | 200                  | 0                      | R2: limit default=20; R3: min>max returns empty list              |
+| TC-15        | page=999999, limit=100, companyName="", jobName="senior", employment=INTERN, companySizes=[100] | 200                  | 0                      | R3: very large page number (beyond total pages), multiple filters combined |
 
 
 ### 5.6 v4 总结
@@ -1312,6 +1327,7 @@ Keep output concise, table-based, and suitable for a report
 #### 10.3.2 流程优化策略
 
 为进一步提升测试用例生成质量，本文采用多轮迭代与人工复核相结合的流程优化策略，具体包括：
+
 
 - **迭代生成（v1 → v2 → v3）**
   - v1：快速生成初始测试用例，用于识别主要覆盖缺口；
