@@ -7,21 +7,22 @@ Base URLs: /api/zdmj
 - HTTP Authentication, scheme: bearer
 - jwt token
 - 除了以下接口，其他接口均需要登录认证
-
-  * `POST /api/zdmj/users`（注册）
-  * `POST /api/zdmj/users/login`（登录）
-  * `POST /api/zdmj/users/verification-codes`（发送验证码）
-  * `PUT /api/zdmj/users/password`（重置密码）
-  * `GET /api/zdmj/users/validation/**`（用户名/邮箱校验）
+  - `POST /api/zdmj/users`（注册）
+  - `POST /api/zdmj/users/login`（登录）
+  - `POST /api/zdmj/users/verification-codes`（发送验证码）
+  - `PUT /api/zdmj/users/password`（重置密码）
+  - `GET /api/zdmj/users/validation/**`（用户名/邮箱校验）
 
 ## 统一错误码与状态码映射
 
-| HTTP状态 | 场景                                                              | 示例业务码                           |
-| ---------- | ------------------------------------------------------------------- | -------------------------------------- |
-| 400      | 参数校验失败、请求参数/类型错误、以及非“不存在”类业务错误           | `1001`、`2001`、`2002`、`2003`、`2007` |
-| 401      | 未登录或 JWT 无效（安全层拦截）                                     | `401`                                  |
-| 403      | 已登录但无权操作他人资源                                            | `1003`                                 |
-| 404      | 业务错误消息包含“不存在”（如用户/教育经历/岗位不存在）              | `2006`、`6006`、`8201`                |
+
+| HTTP状态 | 场景                             | 示例业务码                              |
+| ------ | ------------------------------ | ---------------------------------- |
+| 400    | 参数校验失败、请求参数/类型错误、以及非“不存在”类业务错误 | `1001`、`2001`、`2002`、`2003`、`2007` |
+| 401    | 未登录或 JWT 无效（安全层拦截）             | `401`                              |
+| 403    | 已登录但无权操作他人资源                   | `1003`                             |
+| 404    | 业务错误消息包含“不存在”（如用户/教育经历/岗位不存在）  | `2006`、`6006`、`8201`               |
+
 
 ### 统一错误返回示例
 
@@ -93,9 +94,10 @@ POST /users
 ### 请求参数
 
 
-| 名称 | 位置 | 类型                                      | 必选 | 说明 |
-| ------ | ------ | ------------------------------------------- | ------ | ------ |
+| 名称   | 位置   | 类型                                        | 必选  | 说明   |
+| ---- | ---- | ----------------------------------------- | --- | ---- |
 | body | body | [UserRegisterDTO](#schemauserregisterdto) | 否   | none |
+
 
 > 返回示例
 
@@ -119,9 +121,10 @@ POST /users
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## GET 根据ID查询用户信息
 
@@ -130,9 +133,10 @@ GET /users/{id}
 ### 请求参数
 
 
-| 名称 | 位置 | 类型    | 必选 | 说明   |
-| ------ | ------ | --------- | ------ | -------- |
-| id   | path | integer | 是   | 用户ID |
+| 名称  | 位置   | 类型      | 必选  | 说明   |
+| --- | ---- | ------- | --- | ---- |
+| id  | path | integer | 是   | 用户ID |
+
 
 > 返回示例
 
@@ -156,9 +160,10 @@ GET /users/{id}
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## POST 用户登录
 
@@ -176,9 +181,10 @@ POST /users/login
 ### 请求参数
 
 
-| 名称 | 位置 | 类型                                | 必选 | 说明 |
-| ------ | ------ | ------------------------------------- | ------ | ------ |
+| 名称   | 位置   | 类型                                  | 必选  | 说明   |
+| ---- | ---- | ----------------------------------- | --- | ---- |
 | body | body | [UserLoginDTO](#schemauserlogindto) | 否   | none |
+
 
 > 返回示例
 
@@ -205,9 +211,10 @@ POST /users/login
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## POST 发送验证码
 
@@ -216,9 +223,10 @@ POST /users/verification-codes
 ### 请求参数
 
 
-| 名称  | 位置  | 类型   | 必选 | 说明     |
-| ------- | ------- | -------- | ------ | ---------- |
+| 名称    | 位置    | 类型     | 必选  | 说明   |
+| ----- | ----- | ------ | --- | ---- |
 | email | query | string | 是   | 邮箱地址 |
+
 
 > 返回示例
 
@@ -235,9 +243,10 @@ POST /users/verification-codes
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## PUT 重置密码（忘记密码时使用）
 
@@ -256,9 +265,10 @@ PUT /users/password
 ### 请求参数
 
 
-| 名称 | 位置 | 类型                                                | 必选 | 说明 |
-| ------ | ------ | ----------------------------------------------------- | ------ | ------ |
+| 名称   | 位置   | 类型                                                  | 必选  | 说明   |
+| ---- | ---- | --------------------------------------------------- | --- | ---- |
 | body | body | [UserResetPasswordDTO](#schemauserresetpassworddto) | 否   | none |
+
 
 > 返回示例
 
@@ -275,9 +285,10 @@ PUT /users/password
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## PUT 更新当前登录用户的基本信息
 
@@ -296,9 +307,10 @@ PUT /users/me
 ### 请求参数
 
 
-| 名称 | 位置 | 类型                                  | 必选 | 说明 |
-| ------ | ------ | --------------------------------------- | ------ | ------ |
+| 名称   | 位置   | 类型                                    | 必选  | 说明   |
+| ---- | ---- | ------------------------------------- | --- | ---- |
 | body | body | [UserUpdateDTO](#schemauserupdatedto) | 否   | none |
+
 
 > 返回示例
 
@@ -322,9 +334,10 @@ PUT /users/me
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## GET 验证用户名是否存在
 
@@ -333,9 +346,10 @@ GET /users/validation/username
 ### 请求参数
 
 
-| 名称     | 位置  | 类型   | 必选 | 说明   |
-| ---------- | ------- | -------- | ------ | -------- |
+| 名称       | 位置    | 类型     | 必选  | 说明  |
+| -------- | ----- | ------ | --- | --- |
 | username | query | string | 是   | 用户名 |
+
 
 > 返回示例
 
@@ -352,9 +366,10 @@ GET /users/validation/username
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## GET 验证邮箱是否存在
 
@@ -363,9 +378,10 @@ GET /users/validation/email
 ### 请求参数
 
 
-| 名称  | 位置  | 类型   | 必选 | 说明 |
-| ------- | ------- | -------- | ------ | ------ |
-| email | query | string | 是   | 邮箱 |
+| 名称    | 位置    | 类型     | 必选  | 说明  |
+| ----- | ----- | ------ | --- | --- |
+| email | query | string | 是   | 邮箱  |
+
 
 > 返回示例
 
@@ -383,9 +399,10 @@ GET /users/validation/email
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## 用户认证相关数据模型
 
@@ -410,53 +427,58 @@ GET /users/validation/email
 #### UserRegisterDTO（注册请求）
 
 
-| 字段             | 类型          | 约束                     |
-| ------------------ | --------------- | -------------------------- |
-| username         | string        | 必填，长度 3-50          |
-| password         | string        | 必填，长度 6-20          |
+| 字段               | 类型            | 约束             |
+| ---------------- | ------------- | -------------- |
+| username         | string        | 必填，长度 3-50     |
+| password         | string        | 必填，长度 6-20     |
 | email            | string(email) | 必填，邮箱格式，最大 100 |
-| verificationCode | string        | 必填，固定 6 位          |
+| verificationCode | string        | 必填，固定 6 位      |
+
 
 #### UserLoginDTO（登录请求）
 
 
-| 字段            | 类型   | 约束 |
-| ----------------- | -------- | ------ |
-| usernameOrEmail | string | 必填 |
-| password        | string | 必填 |
+| 字段              | 类型     | 约束  |
+| --------------- | ------ | --- |
+| usernameOrEmail | string | 必填  |
+| password        | string | 必填  |
+
 
 #### UserResetPasswordDTO（重置密码请求）
 
 
-| 字段             | 类型          | 约束            |
-| ------------------ | --------------- | ----------------- |
-| email            | string(email) | 必填，邮箱格式  |
-| verificationCode | string        | 必填，固定 6 位 |
+| 字段               | 类型            | 约束         |
+| ---------------- | ------------- | ---------- |
+| email            | string(email) | 必填，邮箱格式    |
+| verificationCode | string        | 必填，固定 6 位  |
 | newPassword      | string        | 必填，长度 6-50 |
+
 
 #### UserUpdateDTO（更新资料请求）
 
 
-| 字段    | 类型   | 约束           |
-| --------- | -------- | ---------------- |
+| 字段      | 类型     | 约束        |
+| ------- | ------ | --------- |
 | name    | string | 可选，最大 100 |
 | phone   | string | 可选，最大 50  |
 | website | string | 可选，最大 255 |
 
+
 ## 用户认证异常场景
 
 
-| 接口                  | 场景             | HTTP状态 | 业务码 |
-| ----------------------- | ------------------ | ---------- | -------- |
-| `POST /users`         | 用户名已存在     | 400      | 2001   |
-| `POST /users`         | 邮箱已被注册     | 400      | 2002   |
-| `POST /users`         | 验证码错误或过期 | 400      | 2003   |
-| `POST /users/login`   | 用户名或密码错误 | 400      | 2005   |
-| `GET /users/{id}`     | 用户不存在       | 404      | 2006   |
-| `PUT /users/password` | 邮箱未注册       | 400      | 2007   |
-| `PUT /users/password` | 验证码错误或过期 | 400      | 2003   |
-| `PUT /users/me`       | 未登录           | 401      | 401    |
-| `PUT /users/me`       | 用户不存在       | 404      | 2006   |
+| 接口                    | 场景       | HTTP状态 | 业务码  |
+| --------------------- | -------- | ------ | ---- |
+| `POST /users`         | 用户名已存在   | 400    | 2001 |
+| `POST /users`         | 邮箱已被注册   | 400    | 2002 |
+| `POST /users`         | 验证码错误或过期 | 400    | 2003 |
+| `POST /users/login`   | 用户名或密码错误 | 400    | 2005 |
+| `GET /users/{id}`     | 用户不存在    | 404    | 2006 |
+| `PUT /users/password` | 邮箱未注册    | 400    | 2007 |
+| `PUT /users/password` | 验证码错误或过期 | 400    | 2003 |
+| `PUT /users/me`       | 未登录      | 401    | 401  |
+| `PUT /users/me`       | 用户不存在    | 404    | 2006 |
+
 
 # 教育经历控制器
 
@@ -484,9 +506,10 @@ POST /educations
 ### 请求参数
 
 
-| 名称 | 位置 | 类型                                                      | 必选 | 说明 |
-| ------ | ------ | ----------------------------------------------------------- | ------ | ------ |
+| 名称   | 位置   | 类型                                                        | 必选  | 说明   |
+| ---- | ---- | --------------------------------------------------------- | --- | ---- |
 | body | body | [EducationDTOCreateGroup](#schemaeducationdtocreategroup) | 否   | none |
+
 
 > 返回示例
 
@@ -513,9 +536,10 @@ POST /educations
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## PUT 更新教育经历
 
@@ -542,9 +566,10 @@ ID 包含在请求体中，不使用路径变量
 ### 请求参数
 
 
-| 名称 | 位置 | 类型                                                      | 必选 | 说明 |
-| ------ | ------ | ----------------------------------------------------------- | ------ | ------ |
+| 名称   | 位置   | 类型                                                        | 必选  | 说明   |
+| ---- | ---- | --------------------------------------------------------- | --- | ---- |
 | body | body | [EducationDTOUpdateGroup](#schemaeducationdtoupdategroup) | 否   | none |
+
 
 > 返回示例
 
@@ -571,9 +596,10 @@ ID 包含在请求体中，不使用路径变量
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## GET 根据用户ID查询所有教育经历
 
@@ -606,9 +632,10 @@ GET /educations
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## DELETE 删除教育经历
 
@@ -617,9 +644,10 @@ DELETE /educations/{id}
 ### 请求参数
 
 
-| 名称 | 位置 | 类型    | 必选 | 说明 |
-| ------ | ------ | --------- | ------ | ------ |
-| id   | path | integer | 是   | none |
+| 名称  | 位置   | 类型      | 必选  | 说明   |
+| --- | ---- | ------- | --- | ---- |
+| id  | path | integer | 是   | none |
+
 
 > 返回示例
 
@@ -636,9 +664,10 @@ DELETE /educations/{id}
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## GET 根据ID查询教育经历
 
@@ -647,9 +676,10 @@ GET /educations/{id}
 ### 请求参数
 
 
-| 名称 | 位置 | 类型    | 必选 | 说明 |
-| ------ | ------ | --------- | ------ | ------ |
-| id   | path | integer | 是   | none |
+| 名称  | 位置   | 类型      | 必选  | 说明   |
+| --- | ---- | ------- | --- | ---- |
+| id  | path | integer | 是   | none |
+
 
 > 返回示例
 
@@ -676,9 +706,10 @@ GET /educations/{id}
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## 教育经历相关数据模型
 
@@ -699,43 +730,46 @@ GET /educations/{id}
 #### EducationDTOCreateGroup（创建请求）
 
 
-| 字段      | 类型    | 约束               |
-| ----------- | --------- | -------------------- |
-| school    | string  | 必填               |
-| major     | string  | 必填               |
-| degree    | integer | 必填，范围 1-6     |
+| 字段        | 类型      | 约束              |
+| --------- | ------- | --------------- |
+| school    | string  | 必填              |
+| major     | string  | 必填              |
+| degree    | integer | 必填，范围 1-6       |
 | startDate | string  | 必填，`yyyy-MM-dd` |
 | endDate   | string  | 可选，`yyyy-MM-dd` |
-| visible   | boolean | 可选               |
-| gpa       | string  | 可选               |
+| visible   | boolean | 可选              |
+| gpa       | string  | 可选              |
+
 
 #### EducationDTOUpdateGroup（更新请求）
 
 
-| 字段      | 类型           | 约束                 |
-| ----------- | ---------------- | ---------------------- |
-| id        | integer(int64) | 必填                 |
-| school    | string         | 可选                 |
-| major     | string         | 可选                 |
-| degree    | integer        | 可选，若传则范围 1-6 |
-| startDate | string         | 可选，`yyyy-MM-dd`   |
-| endDate   | string         | 可选，`yyyy-MM-dd`   |
-| visible   | boolean        | 可选                 |
-| gpa       | string         | 可选                 |
+| 字段        | 类型             | 约束              |
+| --------- | -------------- | --------------- |
+| id        | integer(int64) | 必填              |
+| school    | string         | 可选              |
+| major     | string         | 可选              |
+| degree    | integer        | 可选，若传则范围 1-6    |
+| startDate | string         | 可选，`yyyy-MM-dd` |
+| endDate   | string         | 可选，`yyyy-MM-dd` |
+| visible   | boolean        | 可选              |
+| gpa       | string         | 可选              |
+
 
 ## 教育经历异常场景
 
 
-| 接口                      | 场景                   | HTTP状态 | 业务码 |
-| --------------------------- | ------------------------ | ---------- | -------- |
-| `POST /educations`        | 未登录                 | 401      | 401    |
-| `POST /educations`        | 添加失败               | 400      | 6001   |
-| `PUT /educations`         | 教育经历 ID 为空       | 400      | 1001   |
-| `PUT /educations`         | 毕业时间早于入学时间   | 400      | 6003   |
-| `PUT /educations`         | 教育经历不存在         | 404      | 6006   |
-| `PUT /educations`         | 无权限修改他人教育经历 | 403      | 1003   |
-| `DELETE /educations/{id}` | 教育经历不存在         | 404      | 6006   |
-| `DELETE /educations/{id}` | 无权限删除他人教育经历 | 403      | 1003   |
+| 接口                        | 场景          | HTTP状态 | 业务码  |
+| ------------------------- | ----------- | ------ | ---- |
+| `POST /educations`        | 未登录         | 401    | 401  |
+| `POST /educations`        | 添加失败        | 400    | 6001 |
+| `PUT /educations`         | 教育经历 ID 为空  | 400    | 1001 |
+| `PUT /educations`         | 毕业时间早于入学时间  | 400    | 6003 |
+| `PUT /educations`         | 教育经历不存在     | 404    | 6006 |
+| `PUT /educations`         | 无权限修改他人教育经历 | 403    | 1003 |
+| `DELETE /educations/{id}` | 教育经历不存在     | 404    | 6006 |
+| `DELETE /educations/{id}` | 无权限删除他人教育经历 | 403    | 1003 |
+
 
 # 岗位信息控制器
 
@@ -746,9 +780,10 @@ GET /jobs/{id}
 ### 请求参数
 
 
-| 名称 | 位置 | 类型    | 必选 | 说明   |
-| ------ | ------ | --------- | ------ | -------- |
-| id   | path | integer | 是   | 岗位ID |
+| 名称  | 位置   | 类型      | 必选  | 说明   |
+| --- | ---- | ------- | --- | ---- |
+| id  | path | integer | 是   | 岗位ID |
+
 
 > 返回示例
 
@@ -791,9 +826,10 @@ GET /jobs/{id}
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## DELETE 删除岗位
 
@@ -802,9 +838,10 @@ DELETE /jobs/{id}
 ### 请求参数
 
 
-| 名称 | 位置 | 类型    | 必选 | 说明   |
-| ------ | ------ | --------- | ------ | -------- |
-| id   | path | integer | 是   | 岗位ID |
+| 名称  | 位置   | 类型      | 必选  | 说明   |
+| --- | ---- | ------- | --- | ---- |
+| id  | path | integer | 是   | 岗位ID |
+
 
 > 返回示例
 
@@ -821,15 +858,16 @@ DELETE /jobs/{id}
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## GET 查询岗位列表（查询参数绑定[岗位分页查询条件（对应 GET /jobs 的查询参数）。]）
 
 GET /jobs
 
-<p>示例：{@code GET /jobs?page=1&limit=20&employment=INTERN&filterSalaryMin=200&jobName=后端}</p>
+示例：{@code GET /jobs?page=1&limit=20&employment=INTERN&filterSalaryMin=200&jobName=后端}
 
 > Body 请求参数
 
@@ -853,19 +891,20 @@ jobName: string
 ### 请求参数
 
 
-| 名称               | 位置 | 类型      | 必选 | 说明                                      |
-| -------------------- | ------ | ----------- | ------ | ------------------------------------------- |
-| body               | body | object    | 否   | none                                      |
-| » page            | body | integer   | 否   | 页码，默认 1；当`page<=0` 时按 1 处理     |
+| 名称                | 位置   | 类型        | 必选  | 说明                         |
+| ----------------- | ---- | --------- | --- | -------------------------- |
+| body              | body | object    | 否   | none                       |
+| » page            | body | integer   | 否   | 页码，默认 1；当`page<=0` 时按 1 处理 |
 | » limit           | body | integer   | 否   | 每页条数，默认 20，最大 100（超出按 100） |
-| » companySizes    | body | [integer] | 否   | 公司规模（多选）                          |
-| » fundingTypes    | body | [integer] | 否   | 公司融资阶段（多选）                      |
-| » industries      | body | [string]  | 否   | 行业（多选）                              |
-| » companyName     | body | string    | 否   | 公司名称                                  |
-| » employment      | body | string    | 否   | 实习 / 全职；不传表示不限制               |
-| » filterSalaryMin | body | integer   | 否   | 期望薪资下限（元）                        |
-| » filterSalaryMax | body | integer   | 否   | 期望薪资上限（元）                        |
+| » companySizes    | body | [integer] | 否   | 公司规模（多选）                   |
+| » fundingTypes    | body | [integer] | 否   | 公司融资阶段（多选）                 |
+| » industries      | body | [string]  | 否   | 行业（多选）                     |
+| » companyName     | body | string    | 否   | 公司名称                       |
+| » employment      | body | string    | 否   | 实习 / 全职；不传表示不限制            |
+| » filterSalaryMin | body | integer   | 否   | 期望薪资下限（元）                  |
+| » filterSalaryMax | body | integer   | 否   | 期望薪资上限（元）                  |
 | » jobName         | body | string    | 否   | 岗位名称关键词（对 job_name 做包含匹配）  |
+
 
 #### 详细说明
 
@@ -882,10 +921,11 @@ FULL_TIME :全职（月薪，salary_type = 2）
 #### 枚举值
 
 
-| 属性          | 值        |
-| --------------- | ----------- |
+| 属性           | 值         |
+| ------------ | --------- |
 | » employment | INTERN    |
 | » employment | FULL_TIME |
+
 
 > 返回示例
 
@@ -936,9 +976,10 @@ FULL_TIME :全职（月薪，salary_type = 2）
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## POST 创建岗位
 
@@ -978,9 +1019,10 @@ POST /jobs
 ### 请求参数
 
 
-| 名称 | 位置 | 类型                                          | 必选 | 说明 |
-| ------ | ------ | ----------------------------------------------- | ------ | ------ |
+| 名称   | 位置   | 类型                                            | 必选  | 说明   |
+| ---- | ---- | --------------------------------------------- | --- | ---- |
 | body | body | [JobDTOCreateGroup](#schemajobdtocreategroup) | 否   | none |
+
 
 > 返回示例
 
@@ -1017,9 +1059,10 @@ POST /jobs
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## PUT 更新岗位
 
@@ -1059,9 +1102,10 @@ PUT /jobs
 ### 请求参数
 
 
-| 名称 | 位置 | 类型                                          | 必选 | 说明 |
-| ------ | ------ | ----------------------------------------------- | ------ | ------ |
+| 名称   | 位置   | 类型                                            | 必选  | 说明   |
+| ---- | ---- | --------------------------------------------- | --- | ---- |
 | body | body | [JobDTOUpdateGroup](#schemajobdtoupdategroup) | 否   | none |
+
 
 > 返回示例
 
@@ -1098,9 +1142,10 @@ PUT /jobs
 ### 返回结果
 
 
-| 状态码 | 状态码含义                                              | 说明 | 数据模型                |
-| -------- | --------------------------------------------------------- | ------ | ------------------------- |
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+| 状态码 | 状态码含义                                                   | 说明   | 数据模型                    |
+| --- | ------------------------------------------------------- | ---- | ----------------------- |
+| 200 | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | none | [Result](#schemaresult) |
+
 
 ## 岗位相关数据模型
 
@@ -1124,71 +1169,73 @@ PUT /jobs
 #### JobDTOCreateGroup / JobDTOUpdateGroup（创建/更新请求）
 
 
-| 字段                | 类型           | 约束                             |
-| --------------------- | ---------------- | ---------------------------------- |
-| id                  | integer(int64) | 更新时必填                       |
-| jobName             | string         | 创建/更新必填                    |
-| companyName         | string         | 创建/更新必填                    |
-| description         | string         | 创建/更新必填                    |
-| location            | string         | 创建/更新必填                    |
-| salaryMin           | integer        | 创建/更新必填                    |
-| salaryMax           | integer        | 创建/更新必填                    |
+| 字段                  | 类型             | 约束                  |
+| ------------------- | -------------- | ------------------- |
+| id                  | integer(int64) | 更新时必填               |
+| jobName             | string         | 创建/更新必填             |
+| companyName         | string         | 创建/更新必填             |
+| description         | string         | 创建/更新必填             |
+| location            | string         | 创建/更新必填             |
+| salaryMin           | integer        | 创建/更新必填             |
+| salaryMax           | integer        | 创建/更新必填             |
 | salaryType          | integer        | 创建/更新必填，1日薪/2月薪/3年薪 |
-| link                | string         | 创建/更新必填                    |
-| companySize         | integer        | 可选                             |
-| companyFundingType  | integer        | 可选                             |
-| companyIndustries   | array[string]  | 可选                             |
-| companyIntroduction | string         | 可选                             |
-| jobDuties           | array[string]  | 可选                             |
-| jobRequirements     | array[string]  | 可选                             |
-| keywords            | array[string]  | 可选                             |
+| link                | string         | 创建/更新必填             |
+| companySize         | integer        | 可选                  |
+| companyFundingType  | integer        | 可选                  |
+| companyIndustries   | array[string]  | 可选                  |
+| companyIntroduction | string         | 可选                  |
+| jobDuties           | array[string]  | 可选                  |
+| jobRequirements     | array[string]  | 可选                  |
+| keywords            | array[string]  | 可选                  |
+
 
 #### JobListItemDTO（详情/列表响应 data）
 
 
-| 字段               | 类型           | 说明              |
-| -------------------- | ---------------- | ------------------- |
-| id                 | integer(int64) | 岗位ID            |
-| jobName            | string         | 岗位名称          |
-| companyId          | integer(int64) | 公司ID            |
-| companyName        | string         | 公司名称          |
-| description        | string         | 岗位描述          |
-| location           | string         | 工作地点          |
-| salaryMin          | integer        | 最低薪资          |
-| salaryMax          | integer        | 最高薪资          |
+| 字段                 | 类型             | 说明          |
+| ------------------ | -------------- | ----------- |
+| id                 | integer(int64) | 岗位ID        |
+| jobName            | string         | 岗位名称        |
+| companyId          | integer(int64) | 公司ID        |
+| companyName        | string         | 公司名称        |
+| description        | string         | 岗位描述        |
+| location           | string         | 工作地点        |
+| salaryMin          | integer        | 最低薪资        |
+| salaryMax          | integer        | 最高薪资        |
 | salaryType         | integer        | 1日薪/2月薪/3年薪 |
 | salary             | string         | 薪资展示文案      |
-| link               | string         | 岗位链接          |
-| jobDuties          | array[string]  | 岗位职责          |
-| jobRequirements    | array[string]  | 岗位要求          |
-| keywords           | array[string]  | 岗位关键词        |
+| link               | string         | 岗位链接        |
+| jobDuties          | array[string]  | 岗位职责        |
+| jobRequirements    | array[string]  | 岗位要求        |
+| keywords           | array[string]  | 岗位关键词       |
 | companyIndustries  | array[string]  | 公司所属行业      |
-| companySize        | integer        | 公司规模          |
-| companyFundingType | integer        | 融资阶段          |
+| companySize        | integer        | 公司规模        |
+| companyFundingType | integer        | 融资阶段        |
+
 
 ## 岗位异常场景
 
 
-| 接口                | 场景                         | HTTP状态 | 业务码 |
-| --------------------- | ------------------------------ | ---------- | -------- |
-| `GET /jobs/{id}`    | 岗位不存在                   | 404      | 8201   |
-| `PUT /jobs`         | 岗位不存在                   | 404      | 8201   |
-| `DELETE /jobs/{id}` | 岗位不存在                   | 404      | 8201   |
-| `POST /jobs`        | 参数校验失败（必填字段缺失） | 400      | 1001   |
-| `GET /jobs`         | `page <= 0` 自动纠正为 `1`   | 200      | -      |
-| `GET /jobs`         | `limit <= 0` 自动纠正为 `20` | 200      | -      |
-| `GET /jobs`         | `limit > 100` 按 `100` 截断  | 200      | -      |
+| 接口                  | 场景                       | HTTP状态 | 业务码  |
+| ------------------- | ------------------------ | ------ | ---- |
+| `GET /jobs/{id}`    | 岗位不存在                    | 404    | 8201 |
+| `PUT /jobs`         | 岗位不存在                    | 404    | 8201 |
+| `DELETE /jobs/{id}` | 岗位不存在                    | 404    | 8201 |
+| `POST /jobs`        | 参数校验失败（必填字段缺失）           | 400    | 1001 |
+| `GET /jobs`         | `page <= 0` 自动纠正为 `1`    | 200    | -    |
+| `GET /jobs`         | `limit <= 0` 自动纠正为 `20`  | 200    | -    |
+| `GET /jobs`         | `limit > 100` 按 `100` 截断 | 200    | -    |
+
 
 # 数据模型定义
 
 > 已在各接口模块内提供对应的数据模型索引，请通过上面的“模型索引”快速定位。
 
-<a id="tocS_Education"></a>
+
 
 ## Education
 
-<a id="schemaeducation">
-<a id="tocseducation"></a>
+
 
 ```json
 {
@@ -1208,26 +1255,27 @@ PUT /jobs
 ### 属性
 
 
-| 名称      | 类型           | 必选  | 约束 | 说明                     |   |
-| ----------- | ---------------- | ------- | ------ | -------------------------- | --- |
-| id        | integer(int64) | false | none | 教育经历ID（主键，自增） |   |
-| userId    | integer(int64) | false | none | 用户ID                   |   |
-| school    | string         | false | none | 学校名称                 |   |
-| major     | string         | false | none | 专业名称                 |   |
-| degree    | integer        | false | none | 学历层次                 |   |
-| startDate | string         | false | none | 入学时间                 |   |
-| endDate   | string         | false | none | 毕业时间                 |   |
-| visible   | boolean        | false | none | 是否在简历中展示         |   |
-| gpa       | string         | false | none | 绩点                     |   |
+| 名称        | 类型             | 必选    | 约束   | 说明            |     |
+| --------- | -------------- | ----- | ---- | ------------- | --- |
+| id        | integer(int64) | false | none | 教育经历ID（主键，自增） |     |
+| userId    | integer(int64) | false | none | 用户ID          |     |
+| school    | string         | false | none | 学校名称          |     |
+| major     | string         | false | none | 专业名称          |     |
+| degree    | integer        | false | none | 学历层次          |     |
+| startDate | string         | false | none | 入学时间          |     |
+| endDate   | string         | false | none | 毕业时间          |     |
+| visible   | boolean        | false | none | 是否在简历中展示      |     |
+| gpa       | string         | false | none | 绩点            |     |
 
-<a id="tocS_UserDTO"></a>
+
+
 
 ## UserDTO
 
-<a id="schemauserdto"></a>
-<a id="schema_UserDTO"></a>
-<a id="tocSuserdto"></a>
-<a id="tocsuserdto"></a>
+
+
+
+
 
 ```json
 {
@@ -1244,23 +1292,24 @@ PUT /jobs
 ### 属性
 
 
-| 名称     | 类型           | 必选  | 约束 | 说明     |   |
-| ---------- | ---------------- | ------- | ------ | ---------- | --- |
-| id       | integer(int64) | false | none | 用户ID   |   |
-| username | string         | false | none | 用户名   |   |
-| email    | string         | false | none | 邮箱     |   |
-| name     | string         | false | none | 用户姓名 |   |
-| phone    | string         | false | none | 电话     |   |
-| website  | string         | false | none | 主页链接 |   |
+| 名称       | 类型             | 必选    | 约束   | 说明   |     |
+| -------- | -------------- | ----- | ---- | ---- | --- |
+| id       | integer(int64) | false | none | 用户ID |     |
+| username | string         | false | none | 用户名  |     |
+| email    | string         | false | none | 邮箱   |     |
+| name     | string         | false | none | 用户姓名 |     |
+| phone    | string         | false | none | 电话   |     |
+| website  | string         | false | none | 主页链接 |     |
 
-<a id="tocS_EducationDTOCreateGroup"></a>
+
+
 
 ## EducationDTOCreateGroup
 
-<a id="schemaeducationdtocreategroup"></a>
-<a id="schema_EducationDTOCreateGroup"></a>
-<a id="tocSeducationdtocreategroup"></a>
-<a id="tocseducationdtocreategroup"></a>
+
+
+
+
 
 ```json
 {
@@ -1279,25 +1328,26 @@ PUT /jobs
 ### 属性
 
 
-| 名称      | 类型           | 必选  | 约束 | 说明                                                                                                                       |   |
-| ----------- | ---------------- | ------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- | --- |
-| id        | integer(int64) | false | none | 教育经历ID<br />更新时必填，创建时不需要                                                                                   |   |
-| school    | string         | true  | none | 学校名称<br />创建时必填，更新时可选                                                                                       |   |
-| major     | string         | true  | none | 专业名称<br />创建时必填，更新时可选                                                                                       |   |
-| degree    | integer        | true  | none | 学历层次（1: 博士, 2: 硕士, 3: 本科, 4: 大专, 5: 高中, 6: 其他）<br />创建时必填，更新时可选（若提供，取值范围必须为 1-6） |   |
-| startDate | string         | true  | none | 入学时间（格式：YYYY-MM-DD，例如：2020-09-01）<br />创建时必填，更新时可选                                                 |   |
-| endDate   | string         | false | none | 毕业时间（格式：YYYY-MM-DD，例如：2024-06-30）<br />创建和更新时都可选（在读情况）                                         |   |
-| visible   | boolean        | false | none | 是否在简历中展示                                                                                                           |   |
-| gpa       | string         | false | none | 绩点                                                                                                                       |   |
+| 名称        | 类型             | 必选    | 约束   | 说明                                                                          |     |
+| --------- | -------------- | ----- | ---- | --------------------------------------------------------------------------- | --- |
+| id        | integer(int64) | false | none | 教育经历ID 更新时必填，创建时不需要                                                         |     |
+| school    | string         | true  | none | 学校名称 创建时必填，更新时可选                                                            |     |
+| major     | string         | true  | none | 专业名称 创建时必填，更新时可选                                                            |     |
+| degree    | integer        | true  | none | 学历层次（1: 博士, 2: 硕士, 3: 本科, 4: 大专, 5: 高中, 6: 其他） 创建时必填，更新时可选（若提供，取值范围必须为 1-6） |     |
+| startDate | string         | true  | none | 入学时间（格式：YYYY-MM-DD，例如：2020-09-01） 创建时必填，更新时可选                               |     |
+| endDate   | string         | false | none | 毕业时间（格式：YYYY-MM-DD，例如：2024-06-30） 创建和更新时都可选（在读情况）                           |     |
+| visible   | boolean        | false | none | 是否在简历中展示                                                                    |     |
+| gpa       | string         | false | none | 绩点                                                                          |     |
 
-<a id="tocS_JobListItemDTO"></a>
+
+
 
 ## JobListItemDTO
 
-<a id="schemajoblistitemdto"></a>
-<a id="schema_JobListItemDTO"></a>
-<a id="tocSjoblistitemdto"></a>
-<a id="tocsjoblistitemdto"></a>
+
+
+
+
 
 ```json
 {
@@ -1333,34 +1383,35 @@ PUT /jobs
 ### 属性
 
 
-| 名称               | 类型           | 必选  | 约束 | 说明                               |   |
-| -------------------- | ---------------- | ------- | ------ | ------------------------------------ | --- |
-| id                 | integer(int64) | false | none | 岗位ID                             |   |
-| jobName            | string         | false | none | 岗位名称                           |   |
-| companyId          | integer(int64) | false | none | 公司ID                             |   |
-| companyName        | string         | false | none | 公司名称                           |   |
-| description        | string         | false | none | 岗位描述                           |   |
-| location           | string         | false | none | 工作地点                           |   |
-| salaryMin          | integer        | false | none | 最低薪资（元）                     |   |
-| salaryMax          | integer        | false | none | 最高薪资（元）                     |   |
-| salaryType         | integer        | false | none | 薪资类型：1=日薪 / 2=月薪 / 3=年薪 |   |
-| salary             | string         | false | none | 薪资展示文案                       |   |
-| link               | string         | false | none | 岗位链接                           |   |
-| jobDuties          | [string]       | false | none | 岗位职责（对应 jobs.content）      |   |
-| jobRequirements    | [string]       | false | none | 岗位要求（对应 jobs.requirements） |   |
-| keywords           | [string]       | false | none | 岗位关键词（对应 jobs.keywords）   |   |
-| companyIndustries  | [string]       | false | none | 公司所属行业                       |   |
-| companySize        | integer        | false | none | 公司人员规模                       |   |
-| companyFundingType | integer        | false | none | 公司融资阶段                       |   |
+| 名称                 | 类型             | 必选    | 约束   | 说明                         |     |
+| ------------------ | -------------- | ----- | ---- | -------------------------- | --- |
+| id                 | integer(int64) | false | none | 岗位ID                       |     |
+| jobName            | string         | false | none | 岗位名称                       |     |
+| companyId          | integer(int64) | false | none | 公司ID                       |     |
+| companyName        | string         | false | none | 公司名称                       |     |
+| description        | string         | false | none | 岗位描述                       |     |
+| location           | string         | false | none | 工作地点                       |     |
+| salaryMin          | integer        | false | none | 最低薪资（元）                    |     |
+| salaryMax          | integer        | false | none | 最高薪资（元）                    |     |
+| salaryType         | integer        | false | none | 薪资类型：1=日薪 / 2=月薪 / 3=年薪    |     |
+| salary             | string         | false | none | 薪资展示文案                     |     |
+| link               | string         | false | none | 岗位链接                       |     |
+| jobDuties          | [string]       | false | none | 岗位职责（对应 jobs.content）      |     |
+| jobRequirements    | [string]       | false | none | 岗位要求（对应 jobs.requirements） |     |
+| keywords           | [string]       | false | none | 岗位关键词（对应 jobs.keywords）    |     |
+| companyIndustries  | [string]       | false | none | 公司所属行业                     |     |
+| companySize        | integer        | false | none | 公司人员规模                     |     |
+| companyFundingType | integer        | false | none | 公司融资阶段                     |     |
 
-<a id="tocS_EducationDTOUpdateGroup"></a>
+
+
 
 ## EducationDTOUpdateGroup
 
-<a id="schemaeducationdtoupdategroup"></a>
-<a id="schema_EducationDTOUpdateGroup"></a>
-<a id="tocSeducationdtoupdategroup"></a>
-<a id="tocseducationdtoupdategroup"></a>
+
+
+
+
 
 ```json
 {
@@ -1379,25 +1430,26 @@ PUT /jobs
 ### 属性
 
 
-| 名称      | 类型           | 必选  | 约束 | 说明                                                                                                                       |   |
-| ----------- | ---------------- | ------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- | --- |
-| id        | integer(int64) | true  | none | 教育经历ID<br />更新时必填，创建时不需要                                                                                   |   |
-| school    | string         | false | none | 学校名称<br />创建时必填，更新时可选                                                                                       |   |
-| major     | string         | false | none | 专业名称<br />创建时必填，更新时可选                                                                                       |   |
-| degree    | integer        | false | none | 学历层次（1: 博士, 2: 硕士, 3: 本科, 4: 大专, 5: 高中, 6: 其他）<br />创建时必填，更新时可选（若提供，取值范围必须为 1-6） |   |
-| startDate | string         | false | none | 入学时间（格式：YYYY-MM-DD，例如：2020-09-01）<br />创建时必填，更新时可选                                                 |   |
-| endDate   | string         | false | none | 毕业时间（格式：YYYY-MM-DD，例如：2024-06-30）<br />创建和更新时都可选（在读情况）                                         |   |
-| visible   | boolean        | false | none | 是否在简历中展示                                                                                                           |   |
-| gpa       | string         | false | none | 绩点                                                                                                                       |   |
+| 名称        | 类型             | 必选    | 约束   | 说明                                                                          |     |
+| --------- | -------------- | ----- | ---- | --------------------------------------------------------------------------- | --- |
+| id        | integer(int64) | true  | none | 教育经历ID 更新时必填，创建时不需要                                                         |     |
+| school    | string         | false | none | 学校名称 创建时必填，更新时可选                                                            |     |
+| major     | string         | false | none | 专业名称 创建时必填，更新时可选                                                            |     |
+| degree    | integer        | false | none | 学历层次（1: 博士, 2: 硕士, 3: 本科, 4: 大专, 5: 高中, 6: 其他） 创建时必填，更新时可选（若提供，取值范围必须为 1-6） |     |
+| startDate | string         | false | none | 入学时间（格式：YYYY-MM-DD，例如：2020-09-01） 创建时必填，更新时可选                               |     |
+| endDate   | string         | false | none | 毕业时间（格式：YYYY-MM-DD，例如：2024-06-30） 创建和更新时都可选（在读情况）                           |     |
+| visible   | boolean        | false | none | 是否在简历中展示                                                                    |     |
+| gpa       | string         | false | none | 绩点                                                                          |     |
 
-<a id="tocS_PageDTOJobListItemDTO"></a>
+
+
 
 ## PageDTOJobListItemDTO
 
-<a id="schemapagedtojoblistitemdto"></a>
-<a id="schema_PageDTOJobListItemDTO"></a>
-<a id="tocSpagedtojoblistitemdto"></a>
-<a id="tocspagedtojoblistitemdto"></a>
+
+
+
+
 
 ```json
 {
@@ -1441,22 +1493,23 @@ PUT /jobs
 ### 属性
 
 
-| 名称       | 类型                                      | 必选  | 约束 | 说明                                                      |   |
-| ------------ | ------------------------------------------- | ------- | ------ | ----------------------------------------------------------- | --- |
-| list       | [[JobListItemDTO](#schemajoblistitemdto)] | false | none | 当前页数据                                                |   |
-| total      | integer(int64)                            | false | none | 总条数                                                    |   |
-| page       | integer                                   | false | none | 当前页码（从 1 开始，与常见 query 参数{@code page} 一致） |   |
-| limit      | integer                                   | false | none | 每页条数                                                  |   |
-| totalPages | integer                                   | false | none | 总页数                                                    |   |
+| 名称         | 类型                                        | 必选    | 约束   | 说明                                       |     |
+| ---------- | ----------------------------------------- | ----- | ---- | ---------------------------------------- | --- |
+| list       | [[JobListItemDTO](#schemajoblistitemdto)] | false | none | 当前页数据                                    |     |
+| total      | integer(int64)                            | false | none | 总条数                                      |     |
+| page       | integer                                   | false | none | 当前页码（从 1 开始，与常见 query 参数{@code page} 一致） |     |
+| limit      | integer                                   | false | none | 每页条数                                     |     |
+| totalPages | integer                                   | false | none | 总页数                                      |     |
 
-<a id="tocS_UserRegisterDTO"></a>
+
+
 
 ## UserRegisterDTO
 
-<a id="schemauserregisterdto"></a>
-<a id="schema_UserRegisterDTO"></a>
-<a id="tocSuserregisterdto"></a>
-<a id="tocsuserregisterdto"></a>
+
+
+
+
 
 ```json
 {
@@ -1471,21 +1524,22 @@ PUT /jobs
 ### 属性
 
 
-| 名称             | 类型          | 必选 | 约束 | 说明                                                  |   |
-| ------------------ | --------------- | ------ | ------ | ------------------------------------------------------- | --- |
-| username         | string        | true | none | 用户名（不能为空，长度 3-50 个字符）                  |   |
-| password         | string        | true | none | 密码（不能为空，长度 6-20 个字符）                    |   |
-| email            | string(email) | true | none | 邮箱（不能为空，需符合邮箱格式，最大长度 100 个字符） |   |
-| verificationCode | string        | true | none | 验证码（不能为空，固定 6 位）                         |   |
+| 名称               | 类型            | 必选   | 约束   | 说明                            |     |
+| ---------------- | ------------- | ---- | ---- | ----------------------------- | --- |
+| username         | string        | true | none | 用户名（不能为空，长度 3-50 个字符）         |     |
+| password         | string        | true | none | 密码（不能为空，长度 6-20 个字符）          |     |
+| email            | string(email) | true | none | 邮箱（不能为空，需符合邮箱格式，最大长度 100 个字符） |     |
+| verificationCode | string        | true | none | 验证码（不能为空，固定 6 位）              |     |
 
-<a id="tocS_UserLoginResponseDTO"></a>
+
+
 
 ## UserLoginResponseDTO
 
-<a id="schemauserloginresponsedto"></a>
-<a id="schema_UserLoginResponseDTO"></a>
-<a id="tocSuserloginresponsedto"></a>
-<a id="tocsuserloginresponsedto"></a>
+
+
+
+
 
 ```json
 {
@@ -1505,19 +1559,20 @@ PUT /jobs
 ### 属性
 
 
-| 名称  | 类型                      | 必选  | 约束 | 说明      |   |
-| ------- | --------------------------- | ------- | ------ | ----------- | --- |
-| token | string                    | false | none | JWT Token |   |
-| user  | [UserDTO](#schemauserdto) | false | none | 用户信息  |   |
+| 名称    | 类型                        | 必选    | 约束   | 说明        |     |
+| ----- | ------------------------- | ----- | ---- | --------- | --- |
+| token | string                    | false | none | JWT Token |     |
+| user  | [UserDTO](#schemauserdto) | false | none | 用户信息      |     |
 
-<a id="tocS_UserLoginDTO"></a>
+
+
 
 ## UserLoginDTO
 
-<a id="schemauserlogindto"></a>
-<a id="schema_UserLoginDTO"></a>
-<a id="tocSuserlogindto"></a>
-<a id="tocsuserlogindto"></a>
+
+
+
+
 
 ```json
 {
@@ -1530,19 +1585,20 @@ PUT /jobs
 ### 属性
 
 
-| 名称            | 类型   | 必选 | 约束 | 说明                     |   |
-| ----------------- | -------- | ------ | ------ | -------------------------- | --- |
-| usernameOrEmail | string | true | none | 用户名或邮箱（不能为空） |   |
-| password        | string | true | none | 密码（不能为空）         |   |
+| 名称              | 类型     | 必选   | 约束   | 说明           |     |
+| --------------- | ------ | ---- | ---- | ------------ | --- |
+| usernameOrEmail | string | true | none | 用户名或邮箱（不能为空） |     |
+| password        | string | true | none | 密码（不能为空）     |     |
 
-<a id="tocS_Job"></a>
+
+
 
 ## Job
 
-<a id="schemajob"></a>
-<a id="schema_Job"></a>
-<a id="tocSjob"></a>
-<a id="tocsjob"></a>
+
+
+
+
 
 ```json
 {
@@ -1572,30 +1628,31 @@ PUT /jobs
 ### 属性
 
 
-| 名称         | 类型           | 必选  | 约束 | 说明                                                        |   |
-| -------------- | ---------------- | ------- | ------ | ------------------------------------------------------------- | --- |
-| id           | integer(int64) | false | none | 岗位ID                                                      |   |
-| jobName      | string         | false | none | 岗位名称                                                    |   |
-| companyId    | integer(int64) | false | none | 公司ID                                                      |   |
-| companyName  | string         | false | none | 公司名称                                                    |   |
-| description  | string         | false | none | 岗位描述                                                    |   |
-| location     | string         | false | none | 工作地点                                                    |   |
-| salaryMin    | integer        | false | none | 最低薪资（元），与 salary_max、salary_type 共同表示薪资范围 |   |
-| salaryMax    | integer        | false | none | 最高薪资（元）                                              |   |
-| salaryType   | integer        | false | none | 薪资类型：1=日薪 / 2=月薪 / 3=年薪                          |   |
-| content      | [string]       | false | none | 岗位职责（JSONB 字符串数组）                                |   |
-| requirements | [string]       | false | none | 岗位要求（JSONB 字符串数组）                                |   |
-| keywords     | [string]       | false | none | 岗位关键词（JSONB 字符串数组）                              |   |
-| link         | string         | false | none | 岗位链接                                                    |   |
+| 名称           | 类型             | 必选    | 约束   | 说明                                        |     |
+| ------------ | -------------- | ----- | ---- | ----------------------------------------- | --- |
+| id           | integer(int64) | false | none | 岗位ID                                      |     |
+| jobName      | string         | false | none | 岗位名称                                      |     |
+| companyId    | integer(int64) | false | none | 公司ID                                      |     |
+| companyName  | string         | false | none | 公司名称                                      |     |
+| description  | string         | false | none | 岗位描述                                      |     |
+| location     | string         | false | none | 工作地点                                      |     |
+| salaryMin    | integer        | false | none | 最低薪资（元），与 salary_max、salary_type 共同表示薪资范围 |     |
+| salaryMax    | integer        | false | none | 最高薪资（元）                                   |     |
+| salaryType   | integer        | false | none | 薪资类型：1=日薪 / 2=月薪 / 3=年薪                   |     |
+| content      | [string]       | false | none | 岗位职责（JSONB 字符串数组）                         |     |
+| requirements | [string]       | false | none | 岗位要求（JSONB 字符串数组）                         |     |
+| keywords     | [string]       | false | none | 岗位关键词（JSONB 字符串数组）                        |     |
+| link         | string         | false | none | 岗位链接                                      |     |
 
-<a id="tocS_UserResetPasswordDTO"></a>
+
+
 
 ## UserResetPasswordDTO
 
-<a id="schemauserresetpassworddto"></a>
-<a id="schema_UserResetPasswordDTO"></a>
-<a id="tocSuserresetpassworddto"></a>
-<a id="tocsuserresetpassworddto"></a>
+
+
+
+
 
 ```json
 {
@@ -1609,20 +1666,21 @@ PUT /jobs
 ### 属性
 
 
-| 名称             | 类型          | 必选 | 约束 | 说明                                 |   |
-| ------------------ | --------------- | ------ | ------ | -------------------------------------- | --- |
-| email            | string(email) | true | none | 邮箱地址（不能为空，需符合邮箱格式） |   |
-| verificationCode | string        | true | none | 验证码（不能为空，固定 6 位）        |   |
-| newPassword      | string        | true | none | 新密码（不能为空，长度 6-50 个字符） |   |
+| 名称               | 类型            | 必选   | 约束   | 说明                    |     |
+| ---------------- | ------------- | ---- | ---- | --------------------- | --- |
+| email            | string(email) | true | none | 邮箱地址（不能为空，需符合邮箱格式）    |     |
+| verificationCode | string        | true | none | 验证码（不能为空，固定 6 位）      |     |
+| newPassword      | string        | true | none | 新密码（不能为空，长度 6-50 个字符） |     |
 
-<a id="tocS_JobDTOCreateGroup"></a>
+
+
 
 ## JobDTOCreateGroup
 
-<a id="schemajobdtocreategroup"></a>
-<a id="schema_JobDTOCreateGroup"></a>
-<a id="tocSjobdtocreategroup"></a>
-<a id="tocsjobdtocreategroup"></a>
+
+
+
+
 
 ```json
 {
@@ -1657,33 +1715,34 @@ PUT /jobs
 ### 属性
 
 
-| 名称                | 类型           | 必选  | 约束 | 说明                                                       |   |
-| --------------------- | ---------------- | ------- | ------ | ------------------------------------------------------------ | --- |
-| id                  | integer(int64) | false | none | 岗位ID（更新时不能为空）                                   |   |
-| jobName             | string         | true  | none | 岗位名称（创建、更新时不能为空）                           |   |
-| companyName         | string         | true  | none | 公司名称（创建、更新时不能为空）                           |   |
-| companySize         | integer        | false | none | 公司人员规模（可选），未传时为空                           |   |
-| companyFundingType  | integer        | false | none | 公司融资阶段（可选）                                       |   |
-| companyIndustries   | [string]       | false | none | 公司所属行业（可选）                                       |   |
-| companyIntroduction | string         | false | none | 公司介绍（可选）                                           |   |
-| description         | string         | true  | none | 岗位描述（创建、更新时不能为空）                           |   |
-| location            | string         | true  | none | 工作地点（创建、更新时不能为空）                           |   |
-| salaryMin           | integer        | true  | none | 最低薪资（创建、更新时不能为空）                           |   |
-| salaryMax           | integer        | true  | none | 最高薪资（创建、更新时不能为空）                           |   |
-| salaryType          | integer        | true  | none | 薪资类型（创建、更新时不能为空）：1=日薪 / 2=月薪 / 3=年薪 |   |
-| link                | string         | true  | none | 岗位链接（创建、更新时不能为空）                           |   |
-| jobDuties           | [string]       | false | none | 岗位职责（字符串列表，写入 jobs.content）                  |   |
-| jobRequirements     | [string]       | false | none | 岗位要求（字符串列表，写入 jobs.requirements）             |   |
-| keywords            | [string]       | false | none | 岗位关键词（字符串列表，写入 jobs.keywords）               |   |
+| 名称                  | 类型             | 必选    | 约束   | 说明                                  |     |
+| ------------------- | -------------- | ----- | ---- | ----------------------------------- | --- |
+| id                  | integer(int64) | false | none | 岗位ID（更新时不能为空）                       |     |
+| jobName             | string         | true  | none | 岗位名称（创建、更新时不能为空）                    |     |
+| companyName         | string         | true  | none | 公司名称（创建、更新时不能为空）                    |     |
+| companySize         | integer        | false | none | 公司人员规模（可选），未传时为空                    |     |
+| companyFundingType  | integer        | false | none | 公司融资阶段（可选）                          |     |
+| companyIndustries   | [string]       | false | none | 公司所属行业（可选）                          |     |
+| companyIntroduction | string         | false | none | 公司介绍（可选）                            |     |
+| description         | string         | true  | none | 岗位描述（创建、更新时不能为空）                    |     |
+| location            | string         | true  | none | 工作地点（创建、更新时不能为空）                    |     |
+| salaryMin           | integer        | true  | none | 最低薪资（创建、更新时不能为空）                    |     |
+| salaryMax           | integer        | true  | none | 最高薪资（创建、更新时不能为空）                    |     |
+| salaryType          | integer        | true  | none | 薪资类型（创建、更新时不能为空）：1=日薪 / 2=月薪 / 3=年薪 |     |
+| link                | string         | true  | none | 岗位链接（创建、更新时不能为空）                    |     |
+| jobDuties           | [string]       | false | none | 岗位职责（字符串列表，写入 jobs.content）         |     |
+| jobRequirements     | [string]       | false | none | 岗位要求（字符串列表，写入 jobs.requirements）    |     |
+| keywords            | [string]       | false | none | 岗位关键词（字符串列表，写入 jobs.keywords）       |     |
 
-<a id="tocS_UserUpdateDTO"></a>
+
+
 
 ## UserUpdateDTO
 
-<a id="schemauserupdatedto"></a>
-<a id="schema_UserUpdateDTO"></a>
-<a id="tocSuserupdatedto"></a>
-<a id="tocsuserupdatedto"></a>
+
+
+
+
 
 ```json
 {
@@ -1697,20 +1756,21 @@ PUT /jobs
 ### 属性
 
 
-| 名称    | 类型   | 必选  | 约束 | 说明                            |   |
-| --------- | -------- | ------- | ------ | --------------------------------- | --- |
-| name    | string | false | none | 用户姓名（最大长度 100 个字符） |   |
-| phone   | string | false | none | 电话（最大长度 50 个字符）      |   |
-| website | string | false | none | 主页链接（最大长度 255 个字符） |   |
+| 名称      | 类型     | 必选    | 约束   | 说明                 |     |
+| ------- | ------ | ----- | ---- | ------------------ | --- |
+| name    | string | false | none | 用户姓名（最大长度 100 个字符） |     |
+| phone   | string | false | none | 电话（最大长度 50 个字符）    |     |
+| website | string | false | none | 主页链接（最大长度 255 个字符） |     |
 
-<a id="tocS_JobDTOUpdateGroup"></a>
+
+
 
 ## JobDTOUpdateGroup
 
-<a id="schemajobdtoupdategroup"></a>
-<a id="schema_JobDTOUpdateGroup"></a>
-<a id="tocSjobdtoupdategroup"></a>
-<a id="tocsjobdtoupdategroup"></a>
+
+
+
+
 
 ```json
 {
@@ -1745,33 +1805,34 @@ PUT /jobs
 ### 属性
 
 
-| 名称                | 类型           | 必选  | 约束 | 说明                                                       |   |
-| --------------------- | ---------------- | ------- | ------ | ------------------------------------------------------------ | --- |
-| id                  | integer(int64) | true  | none | 岗位ID（更新时不能为空）                                   |   |
-| jobName             | string         | true  | none | 岗位名称（创建、更新时不能为空）                           |   |
-| companyName         | string         | true  | none | 公司名称（创建、更新时不能为空）                           |   |
-| companySize         | integer        | false | none | 公司人员规模（可选），未传时为空                           |   |
-| companyFundingType  | integer        | false | none | 公司融资阶段（可选）                                       |   |
-| companyIndustries   | [string]       | false | none | 公司所属行业（可选）                                       |   |
-| companyIntroduction | string         | false | none | 公司介绍（可选）                                           |   |
-| description         | string         | true  | none | 岗位描述（创建、更新时不能为空）                           |   |
-| location            | string         | true  | none | 工作地点（创建、更新时不能为空）                           |   |
-| salaryMin           | integer        | true  | none | 最低薪资（创建、更新时不能为空）                           |   |
-| salaryMax           | integer        | true  | none | 最高薪资（创建、更新时不能为空）                           |   |
-| salaryType          | integer        | true  | none | 薪资类型（创建、更新时不能为空）：1=日薪 / 2=月薪 / 3=年薪 |   |
-| link                | string         | true  | none | 岗位链接（创建、更新时不能为空）                           |   |
-| jobDuties           | [string]       | false | none | 岗位职责（字符串列表，写入 jobs.content）                  |   |
-| jobRequirements     | [string]       | false | none | 岗位要求（字符串列表，写入 jobs.requirements）             |   |
-| keywords            | [string]       | false | none | 岗位关键词（字符串列表，写入 jobs.keywords）               |   |
+| 名称                  | 类型             | 必选    | 约束   | 说明                                  |     |
+| ------------------- | -------------- | ----- | ---- | ----------------------------------- | --- |
+| id                  | integer(int64) | true  | none | 岗位ID（更新时不能为空）                       |     |
+| jobName             | string         | true  | none | 岗位名称（创建、更新时不能为空）                    |     |
+| companyName         | string         | true  | none | 公司名称（创建、更新时不能为空）                    |     |
+| companySize         | integer        | false | none | 公司人员规模（可选），未传时为空                    |     |
+| companyFundingType  | integer        | false | none | 公司融资阶段（可选）                          |     |
+| companyIndustries   | [string]       | false | none | 公司所属行业（可选）                          |     |
+| companyIntroduction | string         | false | none | 公司介绍（可选）                            |     |
+| description         | string         | true  | none | 岗位描述（创建、更新时不能为空）                    |     |
+| location            | string         | true  | none | 工作地点（创建、更新时不能为空）                    |     |
+| salaryMin           | integer        | true  | none | 最低薪资（创建、更新时不能为空）                    |     |
+| salaryMax           | integer        | true  | none | 最高薪资（创建、更新时不能为空）                    |     |
+| salaryType          | integer        | true  | none | 薪资类型（创建、更新时不能为空）：1=日薪 / 2=月薪 / 3=年薪 |     |
+| link                | string         | true  | none | 岗位链接（创建、更新时不能为空）                    |     |
+| jobDuties           | [string]       | false | none | 岗位职责（字符串列表，写入 jobs.content）         |     |
+| jobRequirements     | [string]       | false | none | 岗位要求（字符串列表，写入 jobs.requirements）    |     |
+| keywords            | [string]       | false | none | 岗位关键词（字符串列表，写入 jobs.keywords）       |     |
 
-<a id="tocS_Result"></a>
+
+
 
 ## Result
 
-<a id="schemaresult"></a>
-<a id="schema_Result"></a>
-<a id="tocSresult"></a>
-<a id="tocsresult"></a>
+
+
+
+
 
 ```json
 {
@@ -1785,8 +1846,10 @@ PUT /jobs
 ### 属性
 
 
-| 名称 | 类型    | 必选  | 约束 | 说明                         |
-| ------ | --------- | ------- | ------ | ------------------------------ |
-| code | integer | false | none | 业务码（非HTTP状态码）       |
-| msg  | string  | false | none | 消息提示                     |
+| 名称   | 类型      | 必选    | 约束   | 说明             |
+| ---- | ------- | ----- | ---- | -------------- |
+| code | integer | false | none | 业务码（非HTTP状态码）  |
+| msg  | string  | false | none | 消息提示           |
 | data | object  | false | none | 返回数据（不同接口类型不同） |
+
+

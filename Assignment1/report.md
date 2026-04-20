@@ -2,29 +2,28 @@
 
 > **LLM-Based Black-Box Testing for RESTful API Documentation**
 
+Members: Chengcheng Yin,Qingyi Lu,Yining Sun
+Instructor:Kaifeng Huang
+
 ---
 
 ## 目录
 
-下表为全文章节目录与附录索引。
+正文按**五章叙事**组织（与课堂汇报 / `presentation.html` 一致）；下表左列为汇报章节，右列为**本文原有节号**（便于检索与交叉引用，正文标题仍保留原编号）。
 
 
-| 章    | 标题                           |
-| ---- | ---------------------------- |
-| 1    | 项目概述                         |
-| 2    | 输入（接口文档，文档需求描述）              |
-| 3    | 工具使用情况                       |
-| 4    | 实验设计                         |
-| 5    | 实验步骤                         |
-| 6    | LLM 生成的测试用例（含 6.9 v4 输入组合测试） |
-| 7    | EP/BVA 覆盖率分析                 |
-| 8    | 测试用例分析                       |
-| 9    | 状态迁移测试                       |
-| 10   | LLM 能力分析                     |
-| 11   | 总结                           |
-| 附录 A | 与 LLM 的完整对话记录                |
-| 附录 B | 人工编写的 EP/BVA 全集              |
+| 章（叙事）           | 内容说明                                                                                                                      | 对应正文节号            |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| 1 项目概述 & 实验方案设计 | 实验主题、目标、黑盒范围与对象；输入文档、工具、总体方案与评价维度                                                                                         | §1、§2、§3、§4       |
+| 2 实验步骤          | 以 **GET /jobs** 为例展示 v1–v3 对话（prompt 与 LLM 输出）、**v4** 输入组合用例（§6.9）、**状态迁移**用例与 prompt（§9）；全文对话见附录 A                       | §5、§6.9、§9（及附录 A） |
+| 3 实验结果分析        | **GET /jobs** 示例：EP/BVA 覆盖率计算过程；**全部接口** v1–v3 的 EP/BVA 覆盖率表（§7.4–7.5）；**EP/BVA 缺失项**归纳（§7.7）；**Apifox** v3 执行统计与失败归因（§8） | §7、§8             |
+| 4 AI 能力分析       | AI 在黑盒测试中的作用、局限，与传统方案对比及改进思路                                                                                              | §10               |
+| 5 总结            | 结论与后续工作方向                                                                                                                 | §11               |
+| 附录 A            | 与 LLM 的完整对话记录                                                                                                             | 附录 A              |
+| 附录 B            | 人工编写的 EP/BVA 全集                                                                                                           | 附录 B              |
 
+
+**说明**：原 §9「状态迁移测试」的**设计过程**归入第 2 章叙事（与 LLM 对话）；**结果与讨论**可与第 3 章指标一并阅读。
 
 ---
 
@@ -91,7 +90,7 @@
 - **LLM 工具**：GPT-5.3
   - **用途**：基于接口文档自动生成等价类划分（EP）、边界值分析（BVA）以及测试用例，并通过多轮提示词优化提升生成质量。
 - **测试执行工具**：Apifox
-  - **用途**：批量执行生成的接口测试用例，并记录 HTTP 状态码、业务码及测试结果（通过/失败）。
+  - **用途**：执行生成的接口测试用例，并记录 HTTP 状态码、业务码及测试结果（通过/失败）。
 
 ---
 
@@ -283,16 +282,16 @@ Include both valid and invalid equivalence classes.
 
 Boundary Value Analysis
 Table columns: Field | Boundary Values
-Include boundary values for pagination and filter-related      parameters, especially page, limit, and employment.
+Include boundary values for pagination and filter-related parameters, especially page, limit, and employment.
 
 Sample Test Cases
 Table columns: Test Case ID | Scenario | Expected Result
 
 Requirements:
 
-Cover valid inputs, corrected boundary cases, invalid formats,      invalid enum values, and filter scenarios
+Cover valid inputs, corrected boundary cases, invalid formats,invalid enum values, and filter scenarios
 Generate exactly 10 test cases
-Keep      output concise and structured
+Keep output concise and structured
 ```
 
 #### 5.3.2 **output**
@@ -388,7 +387,7 @@ Equivalence Partitioning
 Table columns: ID | Description | Outcome
 
 Clearly distinguish valid and invalid classes
-Cover constraints: pagination defaults, pagination correction      rules, enum validation, type validation, and filtering behavior
+Cover constraints: pagination defaults, pagination correction rules, enum validation, type validation, and filtering behavior
 
 Boundary Value Analysis
 Table columns: Field | Boundary Values
